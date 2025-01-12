@@ -17,9 +17,17 @@ Roles.init({
         field: 'id' 
     },
     nameRol: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(200),
         allowNull: false,
-        field: 'name_rol'
+        field: 'name_rol',
+        validate: {
+            notEmpty: { msg: 'El nombre del rol no puede estar vacio'},
+            len: { args: [ 1, 200], msg: 'El nombre del rol debe tener entre 1 y 200 caracteres' },
+            is: {
+                args: /^[a-zA-Z0-9\s_-]*$/,
+                msg:'El nombre del rol contiene caracteres no permitidos'
+            }
+        }
     },
     createdAt: {
         type: DataTypes.DATE,

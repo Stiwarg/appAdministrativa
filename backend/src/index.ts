@@ -3,6 +3,7 @@ import { corsConfig } from './config/corsConfing';
 import { env } from './config/env';
 import sequelize, { testConnection } from './config/database';
 import './models/relations/relations';
+import authRoutes from './routes/authRoutes';
 //import { Users, Roles, Companies, Certificates, FileDetails, FilesExcels} from './models/relations/relations';
 
 const app = express();
@@ -14,6 +15,8 @@ app.get('/prueba', ( _req, res ) => {
     res.send('Holaaaa');
 })
 
+app.use( '/', authRoutes );
+//http://localhost:3001/api/patients/
 const startServer = async () => {
     try {
         // Probar conexión antes de sincronizar 

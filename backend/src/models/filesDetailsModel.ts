@@ -37,7 +37,12 @@ FilesDetails.init({
     tpRete: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'tp_rete'
+        field: 'tp_rete',
+        validate: {
+            isInt: true,
+            notNull: { msg: 'El tp_rete es obligatorio'},
+            min: { args: [1], msg: 'El tp_rete debe ser mayor o igual a 1'}
+        }
     },
     nitRegister: {
         type: DataTypes.INTEGER,
@@ -47,32 +52,71 @@ FilesDetails.init({
     dv: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'dv'
+        field: 'dv',
+        validate: {
+            isInt: true,
+            notNull: { msg: 'El dv es obligatorio'},
+            min: { args: [1], msg: 'El dv debe ser mayor o igual a 1'}
+        }
     },
     nameCompany: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'name_company'
+        field: 'name_company',
+        validate: {
+            notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
+            len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
+            is: {
+                args: /^[a-zA-Z0-9\s._-]*$/,
+                msg:'El nombre de la compañia contiene caracteres no permitidos'
+            }
+        }
     },
     nameConcept: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'name_concept'
+        field: 'name_concept',
+        validate: {
+            notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
+            len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
+            is: {
+                args: /^[a-zA-Z0-9\s,._;:'"\-!()&*$@#^=+]*$/,
+                msg:'El nombre de la compañia contiene caracteres no permitidos'
+            }
+        }
     },
     base: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(30,2),
         allowNull: false,
-        field: 'base'
+        field: 'base',
+        validate: {
+            isDecimal: { msg: 'La base debe ser un numero decimal válido' },
+            notNull: { msg: 'La base es obligatoria'},
+            min: { args: [0], msg: 'La base debe ser mayor o igual a 0' },
+            max: { args: [9999999999999999999999999999], msg: 'La base debe ser un número razonable y no exceder el límite de 30 dígitos' }
+        }
     },
     valueRetained: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(30,2),
         allowNull: false,
-        field: 'value_retained'
+        field: 'value_retained',
+        validate: {
+            isDecimal: { msg: 'El valor retenido debe ser un número decimal válido' },
+            notNull: { msg: 'El valor retenido es obligatorio' },
+            min: { args: [0], msg: 'La base debe ser mayor o igual a 0'  },
+            max: {  args: [9999999999999999999999999999], msg: 'La base debe ser un número razonable y no exceder el límite de 30 dígitos' }
+        }
     },
     percentage: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL( 7,3 ),
         allowNull: false,
-        field: 'percentage'
+        field: 'percentage',
+        validate: {
+            isDecimal: { msg: 'El porcentaje debe ser un número decimal válido'},
+            notNull: { msg: 'El porcentaje es obligatorio'},
+            min: {  args: [0], msg: 'El porcentaje debe ser mayor o igual a 0' },
+            max: { args: [100], msg: 'El porcentaje no puede ser mayor que 100' },
+        }
     },
     createdAt: {
         type: DataTypes.DATE,

@@ -21,4 +21,4 @@ export const env: IConfig = {
         refreshTokenExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
     }
 }
-console.log('Cargando variables de entorno:', process.env );
+//console.log('Cargando variables de entorno:', process.env );

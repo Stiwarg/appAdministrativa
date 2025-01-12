@@ -20,12 +20,29 @@ Companies.init({
     nameCompany: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'name_company'
+        field: 'name_company',
+        validate: {
+            notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
+            len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
+            is: {
+                args: /^[a-zA-Z0-9\s._-]*$/,
+                msg:'El nombre de la compañia contiene caracteres no permitidos'
+            }
+        }
     },
     logo: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
-        field: 'logo'
+        field: 'logo',
+        validate: {
+            isUrl: {
+                msg: 'La URL del logo no es válida.'
+            },
+            is: {
+                args: [/^.*\.(jpg|jpeg|png|gif)$/i],
+                msg: 'El logo debe ser una imagen en formato JPG, JPEG o PNG.'
+            }
+        }
     },
     createdAt: {
         type: DataTypes.TIME,

@@ -44,12 +44,30 @@ Certificates.init({
         type: DataTypes.ENUM,
         values: ['IVA','ICA','RTE'],
         allowNull: false,
-        field: 'type_file'
+        field: 'type_file',
+        validate: {
+            notNull: { msg: 'El tipo de archivo es obligatorio'},
+            isIn:{
+                args: [['IVA', 'ICA', 'RTE']],
+                msg: 'El tipo de archivo debe ser uno de los siguientes: IVA, ICA, RTE'
+            }
+        }
     },
     archivoPdf: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'archivo_pdf'
+        field: 'archivo_pdf',
+        validate: {
+            notEmpty: { msg: 'El nombre o la ruta del archivo PDF es obligatorio' },
+            is: {
+                args: /^[a-zA-Z0-9_\-\/\.]+\.pdf$/,
+                msg: 'El archivo debe ser un PDF válido y terminar con ".pdf"'
+            },
+            len: {
+                args: [ 3,255 ],
+                msg: 'El nombre o la ruta del archivo debe tener entre 3 y 255 caracteres'
+            }
+        }
     },
     createdAt: {
         type: DataTypes.TIME,

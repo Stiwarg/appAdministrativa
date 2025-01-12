@@ -23,12 +23,27 @@ FilesExcels.init({
         type: DataTypes.ENUM,
         values: ['IVA','ICA','RTE'],
         allowNull: false,
-        field: 'type_file'
+        field: 'type_file',
+        validate: {
+            notNull: { msg: 'El tipo de archivo es obligatorio'},
+            isIn: {
+                args: [['IVA', 'ICA', 'RTE']],
+                msg: 'El tipo de archivo debe ser uno de los siguientes: IVA, ICA, RTE'
+            }
+        }
     },
     nameFile: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'name_file'
+        field: 'name_file',
+        validate: {
+            notEmpty: { msg: 'El nombre o la ruta del archivo es obligatorio' },
+            len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
+            is: {
+                args: [/^(ICA|IVA|RTE)[A-Za-z0-9\s_-]*\.xlsx$/], 
+                msg:'El nombre del archivo debe comenzar con ICA, IVA o RTE seguido de texto, números, guiones, rayas o espacios y terminar con .xlsx',
+            }
+        }
     },
     empresaId: {
         type: DataTypes.INTEGER,

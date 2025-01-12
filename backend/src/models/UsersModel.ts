@@ -54,7 +54,7 @@ Users.init({
             isInt: true,
             notNull: { msg: 'El NIT es obligatorio' },
             min: { args: [100000], msg: 'El NIT debe ser mayor o igual a 100000'}
-        }                   
+        }                
     },                      
     password: {
         type: DataTypes.STRING,
@@ -101,7 +101,7 @@ Users.init({
         timestamps: true // Controla 'CreatedAt' 
 },);
 
-// Hash automático de contraseñas antes de guardar 
+// Hook: Hash automático de contraseñas antes de guardar 
 Users.beforeCreate( async ( user ) => {
     if ( user.password ) {
         user.password = await bcrypt.hash( user.password, 10 );
