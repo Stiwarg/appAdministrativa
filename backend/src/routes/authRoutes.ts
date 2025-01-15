@@ -1,9 +1,9 @@
 import { Router } from 'express';
-
+import { login, logout } from '../controllers/authController';
+//import { validateLogin } from '../middlewares/validateUserMiddleware';
 const router = Router();
 
-router.get('/', ( _req, res ) => {
-    res.send('Bienvenido al backend de la aplicación. ')
-})
+router.post('/', login );
+router.post('/logout', logout );
 
 export default router;

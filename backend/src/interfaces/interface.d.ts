@@ -1,5 +1,6 @@
 import { TypeFile } from "../utils/enums";
-
+import { JwtPayload } from 'jsonwebtoken';
+import { Request } from 'express';
 
 // -------------  INTERFACES DE LOS MODELOS  ------------- //
 // Se va colocar los 'id' de los modelos de manera opcional ya que estos se generan automaticamente 
@@ -60,6 +61,23 @@ export interface ICertificate {
     archivoPdf: string;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+// -------------  INTERFACES DEL SISTEMA  ------------- //
+
+export interface ILogin {
+    nit: number;
+    password: string;
+}
+
+// -------------  INTERFACES DEL TIPO GLOBAL EXPRESS  ------------- //
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: string | JwtPayload
+        }
+    }
 }
 
 // -------------  INTERFACES DE LA BASE DE DATOS  ------------- //

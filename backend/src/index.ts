@@ -4,9 +4,11 @@ import { env } from './config/env';
 import sequelize, { testConnection } from './config/database';
 import './models/relations/relations';
 import authRoutes from './routes/authRoutes';
-//import { Users, Roles, Companies, Certificates, FileDetails, FilesExcels} from './models/relations/relations';
+import { seedDatabase } from '../seeders/seedDatabase';
+import cookieParser from 'cookie-parser';
 
 const app = express();
+app.use( cookieParser() );
 app.use( corsConfig );
 app.use( express.json() );
 
@@ -15,7 +17,7 @@ app.get('/prueba', ( _req, res ) => {
     res.send('Holaaaa');
 })
 
-app.use( '/', authRoutes );
+app.use( '/api', authRoutes );
 //http://localhost:3001/api/patients/
 const startServer = async () => {
     try {
@@ -25,7 +27,7 @@ const startServer = async () => {
         // Sincronizar modelos con la base de datos
         await sequelize.sync({ force: true }); // Borra las tablas existentes
         console.log('Base de datos sincronizada correctamente');
-
+        await seedDatabase();
         app.listen( env.port, () => {
             console.log(`Server running on http://localhost:${env.port}`);
         });

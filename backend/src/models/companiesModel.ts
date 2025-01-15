@@ -25,7 +25,7 @@ Companies.init({
             notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
             len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
             is: {
-                args: /^[a-zA-Z0-9\s._-]*$/,
+                args: /^[a-zA-Z0-9][a-zA-Z0-9\s.,'()-]+(?:[ &]+[a-zA-Z0-9\s.,'()-]+)*$/,
                 msg:'El nombre de la compañia contiene caracteres no permitidos'
             }
         }
@@ -39,18 +39,18 @@ Companies.init({
                 msg: 'La URL del logo no es válida.'
             },
             is: {
-                args: [/^.*\.(jpg|jpeg|png|gif)$/i],
+                args: [/^.*\.(jpg|jpeg|png|gif|svg)$/i],
                 msg: 'El logo debe ser una imagen en formato JPG, JPEG o PNG.'
             }
         }
     },
     createdAt: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         field: 'created_at'
     },
     updatedAt: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         field: 'updated_at'
     }
