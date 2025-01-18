@@ -6,6 +6,7 @@ import './models/relations/relations';
 import authRoutes from './routes/authRoutes';
 import { seedDatabase } from '../seeders/seedDatabase';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 const app = express();
 app.use( cookieParser() );
@@ -17,6 +18,8 @@ app.get('/prueba', ( _req, res ) => {
     res.send('Holaaaa');
 })
 
+//app.use('/uploads', express.static( path.resolve('./uploads') ));
+app.use('/uploads', express.static( path.join( process.cwd(), 'src', 'uploads') ) );
 app.use( '/api', authRoutes );
 //http://localhost:3001/api/patients/
 const startServer = async () => {

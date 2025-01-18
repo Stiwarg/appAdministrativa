@@ -3,10 +3,7 @@ import { AuthService } from '../services/authService';
 
 export const login = async ( req: Request, res: Response ) => {
     try {
-        console.log('Entra');
-        console.log('este es el req: ', req.body.password );
         const token = await AuthService.autheticatelogin( req.body );
-        console.log('sale');
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',

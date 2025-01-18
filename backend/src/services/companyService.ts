@@ -3,18 +3,27 @@ import { TCompanyFromSchema } from "../schemas/companySchema";
 import { TNewCompany } from "../types/type";
 import { Op } from 'sequelize';
 
-export const createCompany = async ( data: TCompanyFromSchema ): Promise< TNewCompany > => {
 
-    const existingCompany = await Companies.findOne({ where: { nameCompany: { [ Op.gt ]: data.nameCompany} } });
+export class CompanyService {
+    static async createCompany( data: TCompanyFromSchema, logoPath: string): Promise< TNewCompany > {
 
-    if ( existingCompany ) {
-        throw new Error(`Ya existe una compañia con ese nombre: ${ data.nameCompany }`);
-    }
+        const existingCompany = await Companies.findOne({ where: { nameCompany: { [ Op.eq ]: data.nameCompany} } });
 
-    try {
-        const newCompany = await Companies.create( data );
-        return newCompany;
-    } catch (error) {
-        throw new Error('Error al crear la compañia:' + error );
-    }
-}
+        if ( existingCompany ) {
+            throw new Error(`Ya existe una compañia con ese nombre: ${ data.nameCompany }`);
+        }
+
+        try {
+            data.logo = logoPath;
+            const newCompany = await Companies.create({ 
+                nameCompany: data.nameCompany,
+                logo: data.logo // Incluye la ruta procesada del logo.
+            });
+
+            return newCompany;
+        } catch (error) {
+            throw new Error('Error al crear la compañia:' + error );
+        }
+
+        }
+};
