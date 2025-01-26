@@ -8,7 +8,7 @@ export interface IUser {
     id?: number; 
     nit: number;
     password: string;
-    companyId: Number;
+    companyId: number;
     rolId: number;
     createdAt?: Date;
     updatedAt?: Date;
@@ -70,12 +70,38 @@ export interface ILogin {
     password: string;
 }
 
+export interface IUpdatePassword {
+    nit: number,
+    newPassword: string,
+    password: string
+}
+
+export interface IFindByNit {
+    nit: number
+}
+
+export interface ICompanyName {
+    nameCompany: string
+}
+
+export interface IFileInput {
+    nameFile: string;
+    empresaId: number;
+}
+
 // -------------  INTERFACES DEL TIPO GLOBAL EXPRESS  ------------- //
+
+export interface ICustomJwtPayload extends JwtPayload {
+    id: number;
+    nit: number;
+    companyId?: number;
+    rolId: number;
+}
 
 declare global {
     namespace Express {
         interface Request {
-            user?: string | JwtPayload
+            user?: ICustomJwtPayload
         }
     }
 }
@@ -99,4 +125,11 @@ export interface IConfig {
     port: string,
     db: IDbConfig,
     jwt: IJwtConfig
+}
+
+// -------------  INTERFAZ DE LA CONFIGURACIÓN DE MULTER  ------------- //
+export interface IMulterConfigOptions {
+    destinationPath: string;
+    allowedMimeTypes: string[];
+    maxFileSizeMB: number;
 }

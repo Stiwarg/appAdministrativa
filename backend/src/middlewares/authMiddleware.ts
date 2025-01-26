@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { jwtConfig } from '../config/jwtConfig';
+import { ICustomJwtPayload } from '../interfaces/interface';
 
 export const authenticateJWT = ( req: Request, res: Response, next: NextFunction ) => {
 
@@ -11,7 +12,7 @@ export const authenticateJWT = ( req: Request, res: Response, next: NextFunction
     }
 
     try {
-        const decoded = jwt.verify( token, jwtConfig.secret );
+        const decoded = jwt.verify( token, jwtConfig.secret ) as ICustomJwtPayload;
         req.user = decoded;
         return next();
     } catch ( error ) {
@@ -19,3 +20,14 @@ export const authenticateJWT = ( req: Request, res: Response, next: NextFunction
     }
 }
 
+export const authorize = ( allowedRoles: number[] ) => {
+
+    return ( req: Request, res: Response, next: NextFunction ) => {
+        const userRole = req.user?.roleId;
+
+        if ( !allowedRoles.includes( userRole )) {
+            return res.status( 403 ).json({ message: 'No tienes permisos para acceder a esta ruta.'})
+        }
+        return next();
+    }
+}

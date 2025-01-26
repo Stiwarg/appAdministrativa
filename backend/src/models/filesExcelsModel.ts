@@ -38,9 +38,9 @@ FilesExcels.init({
         field: 'name_file',
         validate: {
             notEmpty: { msg: 'El nombre o la ruta del archivo es obligatorio' },
-            len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
+            len: { args: [ 1, 255], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
             is: {
-                args: [/^(ICA|IVA|RTE)[A-Za-z0-9\s_-]*\.xlsx$/], 
+                args: [/^(\/uploads\/excels\/[0-9]+_(IVA|ICA|RTE).*\.(xlsx|xls))$/i], 
                 msg:'El nombre del archivo debe comenzar con ICA, IVA o RTE seguido de texto, números, guiones, rayas o espacios y terminar con .xlsx',
             }
         }
