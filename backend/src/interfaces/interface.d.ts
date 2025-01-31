@@ -32,15 +32,15 @@ export interface IFileExcel {
 
 export interface IFileDetails {
     id?: number;
-    filesExcelsId: number;
-    tpRete: string;
-    nitRegister: number;
-    dv: number;
-    nameCompany: string;
-    nameConcept: string;
-    base: number;
-    valueRetained: number;
-    percentage: number;
+    filesExcelsId: number; // id del modelo FilesExcelsModel
+    tpRete: number;
+    userId: number;
+    dv: number; 
+    nameCompany: string; // Razon social
+    nameConcept: string; // Nombre de concepto
+    base: number; // Base
+    valueRetained: number; // Valor retenido
+    percentage: number; // Porcentaje
     createdAt?: Date;
     updatedAt?: Date;
 }

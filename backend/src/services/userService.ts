@@ -36,7 +36,7 @@ export class UserService {
         return await UserService.createUser( dataWithRole );
     }
 
-    static async findByNit ( nit: number ): Promise< TFoundUser > {
+    static async findByNit ( nit: number ): Promise< TFoundUser | null > {
 
         try {
             console.log('Empezar hacer la busqueda');
@@ -45,17 +45,68 @@ export class UserService {
                 attributes: ['id','nit', 'companyId', 'rolId']
             });
 
-            if ( !user ) {
+            /*if ( !user ) {
                 console.log(`Usuario con NIT ${ nit } no encontrado`);
                 throw new Error(`Usuario con NIT ${ nit } no encontrado.`)
-            }
+            }*/
 
-            return user as TFoundUser;
+            return user as TFoundUser | null ;
 
         } catch (error) {
             throw new Error('Error al buscar el usuario: ' + error);
         }
 
+    }
+
+    static async findOrCreateEmployeeBy( nit: number, companyId: number ): Promise< TFoundUser > {
+
+        try {
+            // Intentar encontrar el usuario por NIT
+            let user = await UserService.findByNit( nit );
+
+            console.log('Estos son los usuarios que se buscan: ', user );
+            // Si el usuario no existe, crearlo
+            if (!user) {
+                const newUser = await UserService.createEmployee({
+                    nit, 
+                    password: nit.toString(),
+                    companyId: companyId
+                });
+                //console.log(`Estos son los usuarios nuevos que se crearon con el nit ${ nit }: `, newUser);
+                return newUser; // Se retorna el nuevo usuario
+            }
+
+            return user; // Se retorna el usuairo encontrado.
+
+        } catch (error: any ) {
+            throw new Error('Error en la búsqueda o creación del usuario: ' + error);
+        }
+    }
+  
+    static async findOrCreateEmployeeBy3 ( nit: number, companyId: number ): Promise< TFoundUser > {
+        try {
+            const [ user, created ] = await Users.findOrCreate({
+                where: { nit },
+                defaults: {
+                    nit,
+                    password: nit.toString(),
+                    companyId,
+                    rolId: 2,
+                },
+                attributes: ['id', 'nit', 'companyId','rolId'],
+            });
+
+            if ( created ) {
+                console.log(`Usuario con NIT ${ nit } creado`);
+            } else {
+                console.log(`Usuario con NIT ${ nit } ya existe`);
+            }
+
+            return user as TFoundUser;
+
+        } catch (error) {
+            throw new Error('Error en la búsqueda o creación del usuario: ' + error );
+        }
     }
 
     static async updatePassword (nit: number, hashedPassword: string ): Promise< void > {

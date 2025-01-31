@@ -2,12 +2,13 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 import FilesExcels from '../models/filesExcelsModel';
 import { IFileDetails } from '../interfaces/interface';
+import Users from '../models/UsersModel';
 
 class FilesDetails extends Model< IFileDetails > implements IFileDetails {
     public id!: number;
     public filesExcelsId!: number;
-    public tpRete!: string;
-    public nitRegister!: number;
+    public tpRete!: number;
+    public userId!: number;
     public dv!: number;
     public nameCompany!: string;
     public nameConcept!: string;
@@ -35,28 +36,32 @@ FilesDetails.init({
         allowNull: false
     },
     tpRete: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         field: 'tp_rete',
         validate: {
-            isInt: true,
+            isInt: { msg: 'tpRete debe ser un numero entero válido'},
             notNull: { msg: 'El tp_rete es obligatorio'},
-            min: { args: [1], msg: 'El tp_rete debe ser mayor o igual a 1'}
+            min: { args: [0], msg: 'El tp_rete debe ser mayor o igual a 0'}
         }
     },
-    nitRegister: {
-        type: DataTypes.INTEGER,
+    userId: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        field: 'nit_register'
+        field: 'user_id',
+        references: {
+            model: Users,
+            key: 'id'
+        }
     },
     dv: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: 'dv',
         validate: {
-            isInt: true,
+            isInt: { msg: 'dv debe ser un número entero válido.'},
             notNull: { msg: 'El dv es obligatorio'},
-            min: { args: [1], msg: 'El dv debe ser mayor o igual a 1'}
+            min: { args: [0], msg: 'El dv debe ser mayor o igual a 0'}
         }
     },
     nameCompany: {
@@ -66,10 +71,10 @@ FilesDetails.init({
         validate: {
             notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
             len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
-            is: {
+            /*is: {
                 args: /^[a-zA-Z0-9\s._-]*$/,
                 msg:'El nombre de la compañia contiene caracteres no permitidos'
-            }
+            }*/
         }
     },
     nameConcept: {
@@ -79,29 +84,29 @@ FilesDetails.init({
         validate: {
             notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
             len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
-            is: {
+            /*is: {
                 args: /^[a-zA-Z0-9\s,._;:'"\-!()&*$@#^=+]*$/,
                 msg:'El nombre de la compañia contiene caracteres no permitidos'
-            }
+            }*/
         }
     },
     base: {
-        type: DataTypes.DECIMAL(30,2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         field: 'base',
         validate: {
-            isDecimal: { msg: 'La base debe ser un numero decimal válido' },
+            isInt: { msg: 'La base debe ser un número entero válido' },
             notNull: { msg: 'La base es obligatoria'},
             min: { args: [0], msg: 'La base debe ser mayor o igual a 0' },
             max: { args: [9999999999999999999999999999], msg: 'La base debe ser un número razonable y no exceder el límite de 30 dígitos' }
         }
     },
     valueRetained: {
-        type: DataTypes.DECIMAL(30,2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         field: 'value_retained',
         validate: {
-            isDecimal: { msg: 'El valor retenido debe ser un número decimal válido' },
+            isInt: { msg: 'El valor retenido debe ser un número entero válido' },
             notNull: { msg: 'El valor retenido es obligatorio' },
             min: { args: [0], msg: 'La base debe ser mayor o igual a 0'  },
             max: {  args: [9999999999999999999999999999], msg: 'La base debe ser un número razonable y no exceder el límite de 30 dígitos' }
