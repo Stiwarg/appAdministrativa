@@ -1,6 +1,10 @@
 import FilesDetails from '../models/filesDetailsModel';
+import FilesExcels from '../models/filesExcelsModel';
 import { TFoundUser, TNewFileDetails } from '../types/type';
 import { UserService } from '../services/userService';
+import dayjs from 'dayjs';
+import { TypeFile,TypePeriod } from '../utils/enums';
+
 export class FilesExcelsDetails {
     
     // Hay dos funciones que son iguales una funciona con la estabilidad de agregar los datos pero se demora mas y hay otra función que es veloz e inserta los miles de registros rapidamente pero puede causar problemas de concurrecnia si no se maneja bien 
@@ -62,13 +66,36 @@ export class FilesExcelsDetails {
      *  - Crea los usuarios si no existen antes de insertar los datos.
      *  - Guardar los registros en la base de datos en batch para mejorar la velocidad.
      */
-    static async readExcel ( excelData: TNewFileDetails[], fileExcelId: number, companyId: number ): Promise< TNewFileDetails[] > {
+    static async readExcel ( excelData: TNewFileDetails[], fileExcelId: number, companyId: number, period: TypePeriod, typeFile: TypeFile ): Promise< TNewFileDetails[] > {
 
         try {
             // Guarda los usuarios ya consultados para evitar repetir busquedas
             const usersCache = new Map< number, TFoundUser >();
             // Acumula los datos que serán insertadas en la base de datos en un solo bulkCreate()
             const bulkInsertData: TNewFileDetails[] = [];
+
+            // Obtener todos los registros existentes en una sola consulta 
+            const existingRecords = await FilesDetails.findAll({
+                include: [{
+                    model: FilesExcels,
+                    required: true,
+                    where: {
+                        year: dayjs().year(),
+                        period: period,
+                        typeFile: typeFile
+                    },
+                    attributes: ['year','period','typeFile']
+                }],
+                attributes: ['userId', 'base', 'valueRetained']
+            });
+
+            // Convertir a Set para búsqueda rápida
+            const existingSet = new Set(
+                existingRecords.map( r => 
+                    `${ r.userId }-${ r.base }-${ r.valueRetained }-${ dayjs().year() }-${ period }-${ typeFile }`
+                )
+            );
+
             for (const row of excelData ) {
                 // Si el usuario ya está en caché, lo usa directamente , asi evita consultas multiples
                 let user = usersCache.get( row.userId );
@@ -80,25 +107,41 @@ export class FilesExcelsDetails {
                     usersCache.set( row.userId, user );    
                 }
 
-                //  Se guarda los datos en bulkInsertData que es un Array 
-                bulkInsertData.push({
-                    filesExcelsId: fileExcelId,
-                    tpRete: row.tpRete,
-                    userId: user.id,
-                    dv: row.dv,
-                    nameCompany: row.nameConcept,
-                    nameConcept: row.nameConcept,
-                    base: row.base,
-                    valueRetained: row.valueRetained,
-                    percentage: row.percentage * 100
-                }); 
+
+                const recordKey = `${ user.id }-${ row.base }-${ row.valueRetained }-${ dayjs().year() }-${ period }-${ typeFile }`;
+
+
+                // Si no existe en el Set, agregarlo al array para insertarlo
+                if ( !existingSet.has( recordKey ) ) {
+                    //console.log('Registro no encontrado, agregado:', recordKey );
+                    bulkInsertData.push({
+                        filesExcelsId: fileExcelId,
+                        tpRete: row.tpRete,
+                        userId: user.id,
+                        dv: row.dv,
+                        nameCompany: row.nameConcept,
+                        nameConcept: row.nameConcept,
+                        base: row.base,
+                        valueRetained: row.valueRetained,
+                        percentage: row.percentage * 100
+                    }); 
+
+                    // Agregarlo al Set para evitar futuras verificaciones innecesarias 
+                    existingSet.add( recordKey );
+                } else {
+                    console.log(`❌ Registro duplicado: userId=${row.userId}, base=${row.base}, valueRetained=${row.valueRetained}`);
+                }
+
             }
 
             // Inserta todos los datos en una sola consulta SQL lo que es mucho mas rapido 
-            const insertedRecords = await FilesDetails.bulkCreate( bulkInsertData );
-            console.log('✔️ Insertados correctamente:', insertedRecords.length);
+            if ( bulkInsertData.length > 0 ) {
+                await FilesDetails.bulkCreate( bulkInsertData );
+            }
+            //const insertedRecords = await FilesDetails.bulkCreate( bulkInsertData );
+            //console.log('✔️ Insertados correctamente:', insertedRecords.length);
             // Se devuelve los registros insertados
-            return insertedRecords as TNewFileDetails[];
+            return bulkInsertData;
         } catch (error) {
             throw new Error('Error al guardar los datos del Excel en FileDetails:' + error );
         }

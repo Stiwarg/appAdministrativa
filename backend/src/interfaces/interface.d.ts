@@ -1,4 +1,4 @@
-import { TypeFile } from "../utils/enums";
+import { TypeFile, TypePeriod } from "../utils/enums";
 import { JwtPayload } from 'jsonwebtoken';
 import { Request } from 'express';
 
@@ -26,6 +26,8 @@ export interface IFileExcel {
     typeFile: TypeFile;
     nameFile: string;
     empresaId: number;
+    year: number;
+    period: TypePeriod;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -87,6 +89,15 @@ export interface ICompanyName {
 export interface IFileInput {
     nameFile: string;
     empresaId: number;
+    period: TypePeriod;
+    typeFile: TypeFile;
+}
+
+export interface ICell {
+    x: number;
+    y: number;
+    width: number,
+    height: number;
 }
 
 // -------------  INTERFACES DEL TIPO GLOBAL EXPRESS  ------------- //

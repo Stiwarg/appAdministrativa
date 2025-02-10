@@ -2,13 +2,15 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 import Companies from '../models/companiesModel';
 import { IFileExcel } from '../interfaces/interface';
-import { TypeFile } from '../utils/enums';
+import { TypeFile, TypePeriod } from '../utils/enums';
 
 class FilesExcels extends Model< IFileExcel > implements IFileExcel {
     public id!: number;
     public typeFile!: TypeFile;
     public nameFile!: string;
     public empresaId!: number;
+    public year!: number;
+    public period!: TypePeriod;
     public createdAt!: Date;
     public updatedAt!: Date;
 }
@@ -53,6 +55,16 @@ FilesExcels.init({
             key: 'id'
         },
         allowNull: false
+    },
+    year: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'year'
+    },
+    period: { 
+        type: DataTypes.ENUM(...Object.values( TypePeriod )),
+        allowNull: false,
+        field: 'period'
     },
     createdAt: {
         type: DataTypes.TIME,

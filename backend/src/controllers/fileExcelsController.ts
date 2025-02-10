@@ -14,13 +14,15 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
         }
 
         // Validar los datos de entrada
-        const { empresaId } : IFileInput = req.body;
+        const { empresaId, period, typeFile } : IFileInput = req.body;
 
         const excelPath = `/uploads/excels/${ req.file.filename }`;
 
         const newFile = await FilesExcelsService.uploadExcelToDatabase({
             empresaId,
-            nameFile: excelPath
+            nameFile: excelPath,
+            period,
+            typeFile
         });
 
         const document = path.join(process.cwd(),'src','uploads','excels', req.file.filename );
@@ -33,7 +35,7 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
             range: 1, // Esto indica que empiezo a leer los datos de la segunda fila
         }) as  unknown as TArrayOfArraysFileDetails;
 
-        console.log('Pasa ');
+        //console.log('Pasa ');
 
         const validRows2 = sheetData.filter(( row ) => {
             try {
@@ -55,8 +57,8 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
             }
         });
 
-        console.log(`Filas válidas: ${ validRows2.length }`);
-        console.log(`Filas omitidas: ${ sheetData.length - validRows2.length }`);
+        //console.log(`Filas válidas: ${ validRows2.length }`);
+        //console.log(`Filas omitidas: ${ sheetData.length - validRows2.length }`);
 
         // Formatear datos
         const formattedData: TNewFileDetails[] = validRows2.map(( row ) => ({
@@ -72,7 +74,7 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
         }));
 
         //const desired = validRows[7];
-        await FilesExcelsDetails.readExcel( formattedData, newFile.id!, newFile.empresaId );
+        await FilesExcelsDetails.readExcel( formattedData, newFile.id!, newFile.empresaId, period, typeFile );
 
         return res.status( 201 ).json({ 
             message: 'Excel procesado y datos guardados correctamente', 

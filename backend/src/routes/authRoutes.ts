@@ -13,6 +13,7 @@ import { updatePasswordSchema, updatePasswordUpdateWithoutNit } from '../schemas
 import { authenticateJWT, authorize } from '../middlewares/authMiddleware';
 import { uploadExcelToDatabase } from '../controllers/fileExcelsController';
 import { filesExcelsSchema } from '../schemas/fileExcelsSchema';
+import { certificateController } from '../controllers/generateCertificateController';
 const router = Router();
 
 // Ruta para ingresar con tus credenciales ( nit y password ) de Login
@@ -34,5 +35,7 @@ router.post('/logout',logout );
 router.post('/gestionExcels', uploadExcels.single('nameFile'), multerErrorHandler, validateSchemaFile( filesExcelsSchema ),uploadExcelToDatabase );
 
 router.get('/empresas', getCompanies );
+
+router.post('/certificado', certificateController );
 
 export default router;
