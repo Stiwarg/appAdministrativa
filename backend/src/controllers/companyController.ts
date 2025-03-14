@@ -12,7 +12,7 @@ export const createCompanyController = async ( req: Request, res: Response ) => 
         }
 
         const logoPath = `/uploads/logos/${ req.file.filename }`;
-        console.log('nombre de la compañia:', nameCompany);
+        //console.log('nombre de la compañia:', nameCompany);
         const newCompany = await CompanyService.createCompany( { nameCompany }, logoPath);
         return res.status(201).json({ message: 'Se ha creado correctamente el registro de la compañia', newCompany })
     } catch (error : any ) {
@@ -24,6 +24,14 @@ export const getCompanies = async ( _req: Request, res: Response ) => {
     try {
         const companies = await CompanyService.getAllCompanies();
         return res.status( 200 ).json( companies );
+    } catch (error: any ) {
+        return res.status( 400 ).json({ message: error.message });
+    }
+}
+
+export const managementCompaniesGet = async ( _req: Request, res: Response ) => {
+    try {
+        return res.status( 200 ).json({ message: 'Tienes acceso a la creación de empresas.'})
     } catch (error: any ) {
         return res.status( 400 ).json({ message: error.message });
     }

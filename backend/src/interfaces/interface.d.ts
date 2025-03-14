@@ -1,6 +1,7 @@
-import { TypeFile, TypePeriod } from "../utils/enums";
+import { Certificate, TypeFile, TypePeriod } from "../utils/enums";
 import { JwtPayload } from 'jsonwebtoken';
 import { Request } from 'express';
+import { typeFileToCertificate } from '../utils/constantes';
 
 // -------------  INTERFACES DE LOS MODELOS  ------------- //
 // Se va colocar los 'id' de los modelos de manera opcional ya que estos se generan automaticamente 
@@ -12,6 +13,10 @@ export interface IUser {
     rolId: number;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface IFindByNit {
+    nit: number;
 }
 
 export interface IRol {
@@ -78,8 +83,20 @@ export interface IUpdatePassword {
     password: string
 }
 
-export interface IFindByNit {
-    nit: number
+// Este es para post
+export interface ICertificateRequest {
+    nit: number,
+    typeFile: Certificate,
+    year: number,
+    period: string;
+}
+
+// Este es get
+export interface ICertificateQueryParams {
+    nit: string;  // Se recibe como string en la URL, luego se convierte a número
+    year: string;
+    typeFile: Certificate;
+    period: string;
 }
 
 export interface ICompanyName {
@@ -98,6 +115,30 @@ export interface ICell {
     y: number;
     width: number,
     height: number;
+}
+
+export interface IUserDetailsExcel {
+    nit: string,
+    "FileDetails.nameConcept": string;
+    'FileDetails.nameCompany': string;
+    "FileDetails.base": number;
+    "FileDetails.valueRetained": number;
+    "FileDetails.Total_base_retencion": string;
+    "FileDetails.Total_valor_retenido": string;
+    "FileDetails.FilesExcel.period": string;
+    "FileDetails.tpRete": string;
+}
+
+export interface ICertificateOptions {
+    certificates: string[];
+    years: ( string | number )[];
+    typeFileToCertificate: Record< Certificate, TypePeriod[] >;
+}
+
+export interface IUserCompanyInfo {
+    nit: number;
+    logo: string;
+    name_company: string;
 }
 
 // -------------  INTERFACES DEL TIPO GLOBAL EXPRESS  ------------- //
@@ -134,6 +175,8 @@ export interface IJwtConfig {
 
 export interface IConfig {
     port: string,
+    frotendUrl: string,
+    backendUrl: string,
     db: IDbConfig,
     jwt: IJwtConfig
 }

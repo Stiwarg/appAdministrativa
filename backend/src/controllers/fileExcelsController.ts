@@ -14,7 +14,8 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
         }
 
         // Validar los datos de entrada
-        const { empresaId, period, typeFile } : IFileInput = req.body;
+        const empresaId = Number( req.body.empresaId );
+        const { period, typeFile } : Omit<IFileInput, "empresaId"> = req.body;
 
         const excelPath = `/uploads/excels/${ req.file.filename }`;
 
@@ -82,6 +83,14 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
             filasOmitidas: sheetData.length - validRows2.length
          })
 
+    } catch (error: any ) {
+        return res.status( 400 ).json({ message: error.message });
+    }
+}
+
+export const getFilesExcels = async ( _req: Request, res: Response ) => {
+    try {
+        return res.status( 200 ).json({ message: 'Tienes acceso a subir archivos excel.'});
     } catch (error: any ) {
         return res.status( 400 ).json({ message: error.message });
     }

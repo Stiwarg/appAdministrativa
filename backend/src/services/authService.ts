@@ -9,7 +9,7 @@ export class AuthService{
     static async autheticatelogin( loginData: ILogin ): Promise< string > {
 
         const { nit, password } = loginData; 
-        const user = await Users.findOne( { where: { nit: nit }, attributes: ['nit', 'password'] } );
+        const user = await Users.findOne( { where: { nit: nit }, attributes: ['nit', 'password', 'rolId'] } );
         console.log('Este es el usuario: ', user );
         if ( !user ) {
             console.log('Error no se encontro el usuario');

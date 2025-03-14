@@ -1,11 +1,14 @@
 import bcrypt from 'bcrypt';
 import Users from '../models/UsersModel';
 import { TFoundUser, TNewUser, TNewUserEmployee } from '../types/type';
+import Companies from '../models/companiesModel';
+import { env } from '../config/env';
 // Aqui se escribe la logica relacionada a la funcionalidad del modelo osea del negocio
 
 export class UserService {
 
     static async hashPasswordBeforeCreate ( data: TNewUser ): Promise< TNewUser > {
+        console.log('holaaaaa:', data.password);
         if ( data.password ) {
             data.password = await bcrypt.hash( data.password, 10 );
             console.log('cc:', data.password );
@@ -127,6 +130,35 @@ export class UserService {
             console.log(`Contraseña actualizada correctamente para el usuario con NIT ${nit}.`);
         } catch (error) {
             throw new Error('Error al actualizar la contraseña: ' + error );
+        }
+    }
+
+
+    static async getUserCompany ( nit: number ) {
+        try {
+            const userCompany = await Users.findOne({
+                attributes: ['nit'],
+                where: { nit: nit },
+                include: [{
+                    model: Companies,
+                    attributes: ['logo','name_company'],
+                }],
+            }) as Users & { Company: { logo: string, name_company: string } };
+
+            console.log('Consulta ',userCompany );
+            if ( !userCompany ) return null;
+
+            //return userCompany;
+            return {
+                data: {
+                    nit: userCompany.nit,
+                    nameCompany: userCompany.Company.name_company,
+                    logo: `${ env.backendUrl }${ userCompany.Company.logo }`
+                }
+            }
+
+        } catch (error) {
+            throw new Error('Error fetching data: ' + error );
         }
     }
 }

@@ -36,7 +36,8 @@ export const isValidUploadDate = ( year: number, period: TypePeriod ): boolean =
     // Fecha limite limite ( 10 días después del final del periodo )
     //const deadline = dayjs( periodEndDate[ period ]).add( 10, 'days');
 
-    // Fecha limite para subir archivos ( 10 dias ANTES del final del periodo )
+    // Fecha limite para subir archivos ( 10 dias ANTES del final del periodo )    const deadline2 = dayjs( periodEndDate[ period ]).subtract( 10, 'days');
+
     const deadline2 = dayjs( periodEndDate[ period ]).subtract( 10, 'days');
 
     // Si la fecha actual es menor o igual al límite la carga es válida

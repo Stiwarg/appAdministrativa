@@ -19,6 +19,8 @@ FilesExcels.belongsTo( Companies, { foreignKey: 'empresa_id' }); // Un archivo e
 // Archivo Excel - Detalle del archivo excel
 FilesExcels.hasMany( FilesDetails, { foreignKey: 'filesExcels_id' });
 FilesDetails.belongsTo( FilesExcels, { foreignKey: 'filesExcels_id' });
+Users.hasMany( FilesDetails, { foreignKey: 'user_id' });
+FilesDetails.belongsTo( Users, { foreignKey: 'user_id'} );
 // Certificado con usuario y Empresa
 Users.hasMany( Certificates, { foreignKey: 'user_id' });
 Companies.hasMany( Certificates, { foreignKey: 'company_id' });

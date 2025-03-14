@@ -9,6 +9,10 @@ export const findUsersNit = async ( req: Request, res: Response ) => {
 
         const userFound = await UserService.findByNit( nit )
 
+        if ( !userFound ) {
+            return res.status( 404 ).json({ message: 'Usuario no encontrado.' });
+        }
+
         return res.status( 201 ).json({ message: 'Usuario encontrado', user: userFound });
     } catch (error: any ) {
         return res.status( 400 ).json({ message: error.message });
@@ -48,12 +52,14 @@ export const updatePassword = async ( req: Request, res: Response ) => {
     }
 }
 
+// Actualizar la contraseña del propio usuario
 export const updateOwnPassword = async ( req: Request, res: Response ) => {
     try {
         console.log('Iniciando actualización de contraseña por el propio usuario...');
 
         // Obtener los datos del usuario autenticado ( asumiendo que jwt almacena en req.user)
         const user = req.user;
+        console.log('Este es el user:', user );
 
         const { newPassword, password } = req.body;
 
@@ -66,12 +72,30 @@ export const updateOwnPassword = async ( req: Request, res: Response ) => {
             return res.status( 400 ).json({ message: 'Las contraseñas no coinciden.'});
         }
 
+        const userData = {
+            nit: user.nit,
+            password: password,
+            companyId: user.companyId!,
+            rolId: user.rolId
+        };
+
         // Actualizar la contraseña
-        const hashedPassword = await UserService.hashPasswordBeforeCreate( password );
+        console.log('Este es el password:', password);
+        console.log('Este es el newPassword:', newPassword );
+        const hashedPassword = await UserService.hashPasswordBeforeCreate( userData );
+        console.log('Esta es la contraseña hashed: ', hashedPassword );
         await UserService.updatePassword( user.nit, hashedPassword.password );
 
         return res.status( 200 ).json({ message: 'Contraseña actualizado con éxito' });
     } catch (error: any ) {
         return res.status( 500 ).json({ message: error.message })
+    }
+}
+
+export const changePasswordGet = async ( _req: Request, res: Response ) => {
+    try {
+        return res.status( 200 ).json({ message: 'Tienes acceso a cambiar la contraseña.'});
+    } catch (error: any ) {
+        return res.status( 400 ).json({ message: error.message });
     }
 }

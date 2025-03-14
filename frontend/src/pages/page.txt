@@ -1,0 +1,1129 @@
+import React, { useState } from 'react';
+import logo from './img/logoCompanyCesar.jpg';
+
+function App() {
+
+  const [ nit, setNit ] = useState('');
+  const [ password, setPassword ] = useState('');
+  const [ nitError, setNitError ] = useState( false );
+  const [ passwordError, setPasswordError ] = useState( false );
+
+  const valideNit = ( value: number ) => {
+    return value.toString().length === 9
+  }
+
+  const validatePassword = ( value: string ) => {
+    return value.length > 6;
+  }
+
+  const handleSubmit = ( e: React.FormEvent ) => {
+
+    e.preventDefault();
+
+    const isNitValid = valideNit( parseInt( nit ) );
+    const isPasswordValid = validatePassword( password ); 
+
+    setNitError( !isNitValid );
+    setPasswordError( !isPasswordValid );
+
+    if ( isNitValid && isPasswordValid ) {
+      console.log('Intentando ingresar al sistema con: ', { nit, password });
+    }
+  }
+
+
+  return (
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        {/* Formulario login */}
+        <div className="bg-white p-8 w-full max-w-md rounded-none shadow-md">
+          {/* Logo */}
+            <div className="flex justify-center mb-8">
+              <img src={ logo } alt="LOGO" className="bg-gray-200 w-80 h-28 flex items-center justify-center text-gray-600" />
+            </div>
+            {/* Titulo de bienvenida */}
+            <h1 className="text-4xl font-bold text-center mb-8">Bienvenido</h1>
+
+            <form onSubmit={ handleSubmit }>
+              {/* Campo NIT */}
+              <div className="mb-4">
+                <label htmlFor="nit" className="block text-lg font-medium mb-2">NIT</label>
+                <input type="number" 
+                id="nit" 
+                value={ nit } 
+                placeholder="Ingrese el NIT de la empresa" className={`w-full px-3 py-2 border ${ nitError ? 'border-red-500' : 'border-gray-300' } rounded-md ${ nitError ? 'focus:border-red-500 focus:ring-red-500' : ''}`}
+                onChange={ ( e ) =>{
+                  setNit( e.target.value );
+                  setNitError( false ) 
+                }} />
+                { nitError && <p className='mt-1 font-bold text-red-500 text-sm'>NIT incorrecto</p> }
+              </div>
+
+              {/* Campo Contraseña */}
+              <div className="mb-6">
+                <label htmlFor="password" className="block text-lg font-medium mb-2">
+                  Contraseña
+                </label>
+                <input type="password" 
+                id="password" 
+                value={ password } 
+                onChange={ ( e ) => {
+                  setPassword( e.target.value );
+                  setPasswordError( false );
+                }}
+                placeholder="Ingrese su contraseña"
+                className={`w-full px-3 py-2 border ${
+                  passwordError ? "border-red-500" : "border-gray-300"
+                } rounded-md ${passwordError ? "focus:border-red-500 focus:ring-red-500" : ""}`}
+                />
+                { passwordError && <p className='mt-1 text-red-500 text-sm font-bold'>Contraseña incorrecta</p>}
+              </div>
+
+              {/* Botón de ingreso */}
+              <button type="submit" className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors">
+                Ingresar
+              </button>
+            </form>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default App
+
+
+
+-------------------------------
+"use client"
+import logo from './img/logoCompanyCesar.jpg';
+import { FileText, Key, Upload, Download, LogOut } from 'lucide-react';
+
+function App() {
+
+
+  return (
+    <>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+          { /* Contenedor principal */}
+          <div className="bg-white w-full max-w-6xl p-4 sm:p-6 md:p-8 rounded-lg shadow-md">
+
+            { /* Logo del dueño del aplicativo */ }
+            <div className='flex justify-center mb-6 md:mb-8'>
+              <img src={ logo } alt="logo" className=' w-full max-w-xs sm:w-80 h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4' />
+            </div>
+
+            { /* Barra de navegación */}
+            <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
+              
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <FileText className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Gestión de Empresas</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <Key className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Cambiar Contraseña</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <Upload className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Cargar Archivos</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <Download className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Descargar Certificados</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <LogOut className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Cerrar Sesión</span>
+              </button>
+            </div>
+
+            { /* Panel de Información */}
+
+            <div className="max-w-md mx-auto border border-gray-200 p-4 sm:p-6 md:p-8 rounded-lg">
+              {/* Logo de la empresa */}
+              <img src="" alt="LOGO DE LA EMPRESA QUE ESTA TOMANDO EL SERVICIO" className='bg-gray-200 w-full h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4 mb-4 sm:mb-6' />
+              <div className="text-center">
+                <h2 className='text-xl sm:text-2xl font-bold mb-2'>Información Del Usuario</h2>
+                <p className='text-gray-600 text-sm sm:text-base'>NIT:1111206857774</p>
+              </div>
+            </div>
+          </div>
+      </div>
+    </>
+  )
+}
+
+export default App
+
+
+---------------------------------------------------------------- Vista de Gestión de Empresas
+"use client"
+import logo from './img/logoCompanyCesar.jpg';
+import { FileText, Key, Upload, Download, LogOut } from 'lucide-react';
+
+function App() {
+
+
+  return (
+    <>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+          { /* Contenedor principal */}
+          <div className="bg-white w-full max-w-6xl p-4 sm:p-6 md:p-8 rounded-lg shadow-md">
+
+            { /* Logo del dueño del aplicativo */ }
+            <div className='flex justify-center mb-6 md:mb-8'>
+              <img src={ logo } alt="logo" className=' w-full max-w-xs sm:w-80 h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4' />
+            </div>
+
+            { /* Barra de navegación */}
+            <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
+              
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <FileText className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Gestión de Empresas</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <Key className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Cambiar Contraseña</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <Upload className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Cargar Archivos</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <Download className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Descargar Certificados</span>
+              </button>
+
+              <button className='flex items-center gap-1 px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                <LogOut className='w-4 h-4 sm:w-5 sm:h-5' />
+                <span className='font-bold'>Cerrar Sesión</span>
+              </button>
+            </div>
+
+            { /* Panel de Información */}
+
+            <div className="w-full max-w-4xl mx-auto border border-gray-200 p-4 rounded-md sm:p-6 md:p-8">
+              <h2 className='text-2xl font-bold mb-6'>Gestión de Empresas:</h2>
+              <div className="space-y-6">
+                {/* Nombre de la empresa */}
+                <div>
+                  <label className='block text-lg mb-2'>Nombre de la empresa:</label>
+                  <input type="text" placeholder='Ingrese el nombre de la empresa' className='w-full px-3 py-2 border border-gray-300 rounded-md'/>
+                </div>
+
+                {/* Área de carga de imagen */}
+                <div>
+                  <label className='block text-lg mb-2'>Cargue la imagen del logo de la empresa:</label>
+                  <div onClick={ undefined } className='border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors'>
+                    <input type="file" className='hidden' accept='.jpeg, .jpg, .png' />
+                    <Download className='mx-auto mb-2 w-14 h-14 text-gray-400' />
+                    <p>
+                      Selecciona una imagen en formato 
+                      <br />
+                      ( .JPEG, .JPG, .PNG )
+                    </p>
+                  </div>
+                </div>
+
+                {/* Botón de agregar */}
+                <button className='w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors font-bold cursor-pointer'>
+                  Agregar empresa
+                </button>
+
+              </div>
+            </div>
+          
+          </div>
+      </div>
+    </>
+  )
+}
+
+export default App
+
+------------------------------------------
+Cambiar  Contraseña DE ADMINISTRADOR
+
+"use client"
+import logo from './img/logoCompanyCesar.jpg';
+import { FileText, Key, Upload, Download, LogOut, Search, Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+import { updatePasswordSchema } from '@proyecto/shared';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { FormDataNit } from './types/types';
+
+console.log(updatePasswordSchema);
+
+
+function App() {
+
+  const [ showPassword, setShowPassword ] = useState( false );
+  const [ showconfirmPassword, setShowconfirmPassword ] = useState( false );
+
+  const { register, handleSubmit, formState: { errors }, } = useForm< FormDataNit >({
+    resolver: zodResolver( updatePasswordSchema ),
+  });
+
+  const onSubmit = ( data: FormDataNit ) => {
+    console.log("Datos enviados: ", data);
+  }
+
+  return (
+    <>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+            { /* Contenedor principal */}
+            <div className="bg-white w-full max-w-6xl p-4 sm:p-6 md:p-8 rounded-lg shadow-md">
+
+              { /* Logo del dueño del aplicativo */ }
+              <div className='flex justify-center mb-6 md:mb-8'>
+                <img src={ logo } alt="logo" className=' w-full max-w-xs sm:w-80 h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4' />
+              </div>
+
+              { /* Barra de navegación */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
+                
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <FileText className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Gestión de Empresas</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Key className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cambiar Contraseña</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Upload className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cargar Archivos</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Download className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Descargar Certificados</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <LogOut className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cerrar Sesión</span>
+                </button>
+              </div>
+
+              { /* Panel de Información */}
+              <form onSubmit={ handleSubmit( onSubmit )}>
+
+                <div className="w-full max-w-4xl mx-auto border border-gray-200 p-4 rounded-md sm:p-6 md:p-8">
+                  <h2 className='text-2xl font-bold mb-6'>Cambiar Contraseña:</h2>
+                  <div className="space-y-6">
+
+                    {/* NIT */}
+                    <div className='flex flex-col md:flex-row md:items-center gap-2'>
+                      <div className='flex-1'>
+                        <label className='block text-lg mb-2'>NIT:</label>
+                        <input { ...register('nit') } 
+                        type="number" 
+                        placeholder='Ingrese el NIT' 
+                        className={`w-full px-3 py-2 border ${ errors.nit ? "border-red-500" : "border-gray-300" } rounded-md`} />
+                        { errors.password && ( <p className='absolute text-red-500 text-sm mt-1 font-bold'>{ errors.password.message }</p>)}
+                      </div>
+
+                      <button className='mt-2 md:mt-9 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors font-bold cursor-pointer flex items-center gap-1'>
+                        <Search className='w-4 h-4 sm:w-5 sm:h-5' />
+                        <span className='font-bold'>Buscar NIT</span>
+                      </button>
+                    </div>
+
+                    { /* Nueva Contraseña */ }
+                    <div>
+                      <label className='block text-lg mb-2'>Nueva contraseña:</label>
+                      <div className='space-y-1'>
+                        <div className="relative">
+                          { /* Input de la contraseña */}
+                          <input {...register("password")} 
+                          type={ showPassword ? "text" : "password"} 
+                          placeholder='Ingrese la nueva contraseña' 
+                          className= {`w-full px-3 py-2 border ${ errors.password ? "border-red-500" : "border-gray-300" } rounded-md`} 
+                          />
+                          <button 
+                          type='button' 
+                          onClick={() => setShowPassword(!showPassword) } 
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer hover:text-blue-500'
+                          >
+                            { showPassword ? ( 
+                              <EyeOff className='w-4 h-4 sm:w-5 sm:h-5'/> 
+                            ) : ( 
+                            <Eye className='w-4 h-4 sm:w-5 sm:h-5'/> 
+                            ) }
+                          </button>
+                          { errors.password && ( <p className=' text-red-500 text-sm mt-1 font-bold'>{ errors.password.message }</p>)}
+                        </div>
+                      </div>
+                    </div>
+
+                    { /* Confirmar nueva Contraseña */ }
+                    <div>
+                      <label className='block text-lg mb-2'>Confirmar nueva contraseña:</label>
+                      <div className="space-y-1">
+                        <div className="relative">
+                          <input { ...register('newPassword')} 
+                          type={ showconfirmPassword ? "text" : "password"} 
+                          placeholder='Confirmar la nueva contraseña' 
+                          className={`w-full px-3 py-2 border ${ errors.password ? "border-red-500" : "border-gray-300" } rounded-md`} 
+                          />
+                          <button type='button' 
+                          onClick={ () => setShowconfirmPassword( !showconfirmPassword ) }  
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer hover:text-blue-500'
+                          >
+                            { showconfirmPassword ? (
+                              <EyeOff className='w-4 h-4 sm:w-5 sm:h-5'/> 
+                            ) : ( 
+                              <Eye className='w-4 h-4 sm:w-5 sm:h-5'/>
+                            )}
+                          </button>
+                          { errors.newPassword && ( <p className=' text-red-500 text-sm mt-1 font-bold'>{ errors.newPassword.message }</p>)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Botón de agregar */}
+                    <div className='flex justify-center'>
+                      <button className='w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors font-bold cursor-pointer'>
+                        Actualizar Contraseña
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+
+
+            </div>
+        </div>
+    </>
+  )
+}
+
+export default App
+
+
+------------------------------------------
+Cambiar  Contraseña De Usuario
+"use client"
+import logo from './img/logoCompanyCesar.jpg';
+import { FileText, Key, Upload, Download, LogOut, Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+import { updatePasswordUpdateWithoutNit } from '@proyecto/shared';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { FormData } from './types/types';
+
+console.log(updatePasswordUpdateWithoutNit);
+
+
+function App() {
+
+  const [ showPassword, setShowPassword ] = useState( false );
+  const [ showconfirmPassword, setShowconfirmPassword ] = useState( false );
+
+  const { register, handleSubmit, formState: { errors }, } = useForm< FormData >({
+    resolver: zodResolver( updatePasswordUpdateWithoutNit ),
+  });
+
+  const onSubmit = ( data: FormData ) => {
+    console.log("Datos enviados: ", data);
+  }
+
+  return (
+    <>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+            { /* Contenedor principal */}
+            <div className="bg-white w-full max-w-6xl p-4 sm:p-6 md:p-8 rounded-lg shadow-md">
+
+              { /* Logo del dueño del aplicativo */ }
+              <div className='flex justify-center mb-6 md:mb-8'>
+                <img src={ logo } alt="logo" className=' w-full max-w-xs sm:w-80 h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4' />
+              </div>
+
+              { /* Barra de navegación */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
+                
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <FileText className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Gestión de Empresas</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Key className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cambiar Contraseña</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Upload className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cargar Archivos</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Download className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Descargar Certificados</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <LogOut className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cerrar Sesión</span>
+                </button>
+              </div>
+
+              { /* Panel de Información */}
+              <form onSubmit={ handleSubmit( onSubmit )}>
+
+                <div className="w-full max-w-4xl mx-auto border border-gray-200 p-4 rounded-md sm:p-6 md:p-8">
+                  <h2 className='text-2xl font-bold mb-6'>Cambiar Contraseña:</h2>
+                  <div className="space-y-6">  
+
+                    { /* Nueva Contraseña */ }
+                    <div>
+                      <label className='block text-lg mb-2'>Nueva contraseña:</label>
+                      <div className='space-y-1'>
+                        <div className="relative">
+                          { /* Input de la contraseña */}
+                          <input {...register("password")} 
+                          type={ showPassword ? "text" : "password"} 
+                          placeholder='Ingrese la nueva contraseña' 
+                          className= {`w-full px-3 py-2 border ${ errors.password ? "border-red-500" : "border-gray-300" } rounded-md`} 
+                          />
+                          <button 
+                          type='button' 
+                          onClick={() => setShowPassword(!showPassword) } 
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer hover:text-blue-500'
+                          >
+                            { showPassword ? ( 
+                              <EyeOff className='w-4 h-4 sm:w-5 sm:h-5'/> 
+                            ) : ( 
+                            <Eye className='w-4 h-4 sm:w-5 sm:h-5'/> 
+                            ) }
+                          </button>
+                          { errors.password && ( <p className=' text-red-500 text-sm mt-1 font-bold'>{ errors.password.message }</p>)}
+                        </div>
+                      </div>
+                    </div>
+
+                    { /* Confirmar nueva Contraseña */ }
+                    <div>
+                      <label className='block text-lg mb-2'>Confirmar nueva contraseña:</label>
+                      <div className="space-y-1">
+                        <div className="relative">
+                          <input { ...register('newPassword')} 
+                          type={ showconfirmPassword ? "text" : "password"} 
+                          placeholder='Confirmar la nueva contraseña' 
+                          className={`w-full px-3 py-2 border ${ errors.password ? "border-red-500" : "border-gray-300" } rounded-md`} 
+                          />
+                          <button type='button' 
+                          onClick={ () => setShowconfirmPassword( !showconfirmPassword ) }  
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer hover:text-blue-500'
+                          >
+                            { showconfirmPassword ? (
+                              <EyeOff className='w-4 h-4 sm:w-5 sm:h-5'/> 
+                            ) : ( 
+                              <Eye className='w-4 h-4 sm:w-5 sm:h-5'/>
+                            )}
+                          </button>
+                          { errors.newPassword && ( <p className=' text-red-500 text-sm mt-1 font-bold'>{ errors.newPassword.message }</p>)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Botón de agregar */}
+                    <div className='flex justify-center'>
+                      <button className='w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors font-bold cursor-pointer'>
+                        Actualizar Contraseña
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+
+
+            </div>
+        </div>
+    </>
+  )
+}
+
+export default App
+
+
+--------------Cargar Archivos
+"use client"
+import logo from './img/logoCompanyCesar.jpg';
+import { FileText, Key, Upload, Download, LogOut, Check, AlertCircle, X, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { filesExcelsSchema,TypeFile, bimesters, month, TFilesExcelsSchema } from '@proyecto/shared'
+import { TUploadStatus } from './types/types';
+///import { EBimonthlyPeriod, EMonthlyPeriod, ETypeFile } from './utils/util';
+
+
+function App() {
+
+  const [ companies , setCompanies ] = useState< {id: number, name: string}[] >([]);
+  const [ selectedCompany, setSelectedCompany ] = useState< string | null >( null );
+  const [ selectedFile, setSelectedFile ] = useState< File | null >( null );
+  const [ uploadedFile, setUploadedFile ] = useState< string | null >( null );
+  const [ uploadedStatus, setUploadedStatus ] = useState< TUploadStatus >("idle");
+  const [ errorMessage, setErrorMessage ] = useState< string >("");
+
+  const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm< TFilesExcelsSchema >({
+    resolver: zodResolver( filesExcelsSchema )
+  });
+
+  const selectedTypeFile = watch("typeFile");
+
+  //const [ fileType, setFileType ] = useState< ETypeFile | "" >("");
+  //const [ period, setPeriod ] = useState< string >("");
+
+  // Resetear el período cuando cambia el tipo de archivo
+  useEffect(() => {
+    fetch("api/empresas")
+    .then( response => response.json())
+    .then( data => setCompanies( data.companies ))
+    .catch( ( error ) => console.error('Error cargando empresas:', error ));
+  }, []);
+
+  const handleFileChange = ( event: React.ChangeEvent< HTMLInputElement > ) => {
+    const file = event.target.files?.[0];
+    if ( file ) {
+      setSelectedFile( file );
+      setValue( "nameFile", `/uploads/excels/${Date.now()}_${file.name}` );
+      setUploadedFile("idle");
+    }
+  }
+
+  const dismissNotification = () => {
+    setUploadedFile("");
+    setUploadedStatus("idle");
+    setErrorMessage("");
+  }
+
+  //const isPeriodMonthly = fileType === ETypeFile.RTE;
+
+  const periodOptions = selectedTypeFile === TypeFile.RTE ? Object.values( month ) : Object.values( bimesters );
+
+  const onSubmit = ( data: TFilesExcelsSchema ) => {
+    console.log("Datos enviados: ", data );
+  }
+
+  return (
+    <>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+            { /* Contenedor principal */}
+            <div className="bg-white w-full max-w-6xl p-4 sm:p-6 md:p-8 rounded-lg shadow-md">
+
+              { /* Logo del dueño del aplicativo */ }
+              <div className='flex justify-center mb-6 md:mb-8'>
+                <img src={ logo } alt="logo" className=' w-full max-w-xs sm:w-80 h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4' />
+              </div>
+
+              { /* Barra de navegación */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
+                
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <FileText className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Gestión de Empresas</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Key className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cambiar Contraseña</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Upload className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cargar Archivos</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Download className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Descargar Certificados</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <LogOut className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cerrar Sesión</span>
+                </button>
+              </div>
+
+              { /* Panel de Información */}
+              <form onSubmit={ handleSubmit( onSubmit ) }>
+
+                <div className="w-full max-w-4xl mx-auto border border-gray-200 p-4 rounded-md sm:p-6 md:p-8">
+                  <h2 className='text-2xl font-bold mb-6'>Cargar Archivos:</h2>
+                  <div className="space-y-6">
+
+                    {/* Notificación de éxito */}
+                    {
+                      uploadedStatus === 'success' && (
+                        <div className='mb-6 p-4 bg-green-100 border border-green-300 rounded-md flex items-center justify-between'>
+                          <div className="flex items-center">
+                            <Check className='w-5 h-5 text-green-600 mr-2'/>
+                            <span className='text-green-800'>
+                              El archivo <strong>{ uploadedFile }</strong> se ha subido correctamente.
+                            </span>
+                          </div>
+                          <button onClick={ dismissNotification } className='text-green-600 hover:text-green-800' >
+                            <X className='w-5 h-5'/>
+                          </button>
+                        </div>
+                      )
+                    }
+
+                    {/* Notificación de error */}
+
+                    {
+                      uploadedStatus === 'error' && (
+                        <div className='mb-6 p-4 bg-red-100 border border-red-300 rounded-md flex items-center justify-between'>
+                          <div className='flex items-center'>
+                              <AlertCircle className='w-5 h-5 text-red-600 mr-6' />
+                              <span className='text-red-800'>
+                                { errorMessage }
+                              </span>
+                          </div>
+                          <button onClick={ dismissNotification } className='text-red-600 hover:text-red-800'>
+                            <X className='w-5 h-5'/>
+                          </button>
+                        </div>
+                      )
+                    }
+
+                    {/* Selector de empresas */}
+                    <div>
+                      <label className='block text-lg mb-2'>Seleccione la empresa a la que pertenece la información</label>
+                      <select 
+                      { ...register("empresaId") }
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md bg-white' 
+                      defaultValue=""
+                      onChange={ ( e ) => setSelectedCompany( e.target.value ) }
+                      >
+                        <option value="" disabled>
+                          Seleccione una empresa
+                        </option>
+                        { companies.map(( company ) => (
+                          <option key={ company.id } value={ company.id }>{ company.name }</option>
+                        ))}
+                      </select>
+                      { errors.empresaId && ( <p className='text-red-500'>{ errors.empresaId.message }</p>)}
+                    </div>
+
+                    {/* Selector de tipo de archivo */}
+                    <div>
+                      <label className='block text-lg mb-2'>Tipo de archivo:</label>
+                      <select 
+                      { ...register("typeFile") }
+                      className='w-full px-3 py-2 border border-gray-300 rounded-md bg-white'
+                      >
+                        <option value="" disabled= { !!selectedTypeFile }>
+                          Seleccione tipo de archivo
+                        </option>
+                        { Object.values( TypeFile ).map(( fileType ) => (
+                          <option value={ fileType } key={ fileType }>{ fileType }</option>
+                        ))}
+                      </select>
+                      { errors.typeFile && ( <p className='text-red-500'>{ errors.typeFile.message }</p>)}
+                    </div>
+
+                    {/* Selector de periodo */}
+                      <div>
+                        <label className='block text-lg mb-2'>
+                          Periodo
+                        </label>
+                        <Controller
+                          name='period'
+                          control= { control }
+                          render={({ field }) => (
+                            <select {...field} className={`w-full px-3 py-2 border ${ !selectedTypeFile ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'border-gray-300 bg-white'} rounded-md `} disabled={ !selectedTypeFile } >
+                                <option value="" disabled={ !!field.value }>
+                                  Seleccione un periodo
+                                </option>
+                                { periodOptions.map(( period ) => (
+                                  <option value={ period } key={ period }>{ period }</option>
+                                ))}
+                            </select>
+                          )}
+                        />
+                        { errors.period && ( <p className='text-red-500'>{ errors.period.message }</p>)}
+                      </div>
+                    
+
+                    { /* Área de cargar de archivos */ }
+                    
+                    <div>
+                      <label className='block text-lg mb-2'>Seleccione un archivo</label>
+                        <div className="relative">
+                          <input 
+                          type="file" 
+                          accept='.xlsx, .xls'
+                          onChange={ handleFileChange }
+                          className='hidden'
+                          id='file-upload'
+                          />
+                          <label 
+                          htmlFor="file-upload"
+                          className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed transition-colors cursor-pointer rounded-lg ${ !selectedFile ? 'border-gray-300  hover:border-gray-400' : ' bg-green-300  border-green-600 hover:border-green-700 ' }`}                   
+                          >
+                            <Download className={`w-12 h-12 mb-2 ${ !selectedFile ? 'text-gray-400' : 'text-green-500'}`}/>
+                            <p className='text-center text-gray-600'>
+                              Seleccione un archivo en formato Excel
+                              <br />
+                              ( .XLSX, .XLS ):
+                            </p>
+                            { selectedFile && (
+                              <p className='mt-2 text-lg text-black font-bold'>Archivo seleccionado: { selectedFile.name }</p>
+                            )}
+                          </label>
+                        </div>
+                    </div>
+
+                    {/* Botón de subir */}
+                    <div className="flex justify-center">
+                      <button 
+                      className={`w-full max-w-xs rounded-md font-bold transition-colors py-3 ${ !selectedFile || !selectedCompany || !selectedTypeFile || !periodOptions ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white   hover:bg-gray-800 cursor-pointer' }`}
+                      disabled={ !selectedFile || !selectedCompany || !selectedTypeFile || !periodOptions }
+                      >
+                        {
+                          uploadedStatus === 'uploading' ? (
+                            <>
+                              <Loader2 className='w-5 h-5 mr-2 animate-spin'/>
+                              Subiendo...
+                            </>
+                          ) : (
+                            "Subir archivo"
+                          )
+                        }
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+    </>
+  )
+}
+
+export default App
+
+
+-------------------------------  Pagina de Certificados
+"use client"
+import logo from './img/logoCompanyCesar.jpg';
+import { FileText, Key, Upload, Download, LogOut, Check, AlertCircle, X, Loader2, Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { certificateSchema, Certificate , bimesters, month, certificateRequest } from '@proyecto/shared'
+import { TSearchStatus } from './types/types';
+import axios from 'axios';
+///import { EBimonthlyPeriod, EMonthlyPeriod, ETypeFile } from './utils/util';
+
+
+function App() {
+
+  const [ years, setYears ] = useState< { id: number, year: number }[] >([]);
+  const [ errorMessage, setErrorMessage ] = useState< string >("");
+  const [ selectedYear, setSelectedYear ] = useState< number | null >( null );
+  const [ searchStatus, setSearchStatus ] = useState< TSearchStatus >("idle");
+  const [ certificateFound, setCertificateFound ] = useState< boolean >(false);
+  const [ certificateDetails, setCertificateDetails ] = useState< Certificate | null >( null );
+
+  const { register, handleSubmit, watch, control, formState: { errors } } = useForm< certificateRequest >({
+    resolver: zodResolver( certificateSchema )
+  });
+
+  const selectedTypeCertificate = watch("typeFile");
+
+  //const [ fileType, setFileType ] = useState< ETypeFile | "" >("");
+  //const [ period, setPeriod ] = useState< string >("");
+
+  // Resetear el período cuando cambia el tipo de archivo
+  useEffect(() => {
+    fetch("api/empresas")
+    .then( response => response.json())
+    .then( data => setYears( data.year ))
+    .catch( ( error ) => console.error('Error cargando empresas:', error ));
+  }, []);
+
+  /*const handleFileChange = ( event: React.ChangeEvent< HTMLInputElement > ) => {
+    const file = event.target.files?.[0];
+    if ( file ) {
+      setValue( "nameFile", `/uploads/excels/${Date.now()}_${file.name}` );
+      setUploadedFile("idle");
+    }
+  }*/
+
+  const dismissNotification = () => {
+    setErrorMessage("");
+    setSearchStatus('idle');
+    
+  }
+
+  //const isPeriodMonthly = fileType === ETypeFile.RTE;
+
+  const periodOptions = selectedTypeCertificate === Certificate.CERTIFICADO_RETENCION_FUENTE_RTE ? Object.values( month ) : Object.values( bimesters );
+
+  /*const onSubmit = ( data: certificateRequest ) => {
+    console.log("Datos enviados: ", data );
+  }*/
+
+  const handleSearch = async ( data: certificateRequest ) => {
+    setSearchStatus("searching");
+    setErrorMessage("");
+
+    try {
+      const response = await axios.post('/asdadsa', data );
+      if ( response.data.success ) {
+        setCertificateFound( true );
+        setCertificateDetails( response.data.certificate );
+        setSearchStatus('success');
+      } else {
+        setCertificateFound( false );
+        setErrorMessage('Certificado no encontrado');
+        setSearchStatus('error');
+      }
+    } catch (error) {
+      console.error('Error buscando certificado:', error);
+      setErrorMessage('Ocurrió un error al buscar el certificado.')
+      setSearchStatus('error');
+    }
+  }
+
+  return (
+    <>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+            { /* Contenedor principal */}
+            <div className="bg-white w-full max-w-6xl p-4 sm:p-6 md:p-8 rounded-lg shadow-md">
+
+              { /* Logo del dueño del aplicativo */ }
+              <div className='flex justify-center mb-6 md:mb-8'>
+                <img src={ logo } alt="logo" className=' w-full max-w-xs sm:w-80 h-20 sm:h-28 flex items-center justify-center text-gray-600 text-xs sm:text-sm text-center p-2 sm:p-4' />
+              </div>
+
+              { /* Barra de navegación */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
+                
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <FileText className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Gestión de Empresas</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Key className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cambiar Contraseña</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Upload className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cargar Archivos</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <Download className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Descargar Certificados</span>
+                </button>
+
+                <button className='flex items-center gap-1 px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition-colors whitespace-nowrap text-xs sm:text-sm cursor-pointer'>
+                  <LogOut className='w-4 h-4 sm:w-5 sm:h-5' />
+                  <span className='font-bold'>Cerrar Sesión</span>
+                </button>
+              </div>
+
+              { /* Panel de Información */}
+              <form onSubmit={ handleSubmit( handleSearch ) }>
+
+                <div className="w-full max-w-4xl mx-auto border border-gray-200 p-4 rounded-md sm:p-6 md:p-8">
+
+                  <h2 className='text-2xl font-bold mb-6'>Descargar Certificados: </h2>
+
+                  { searchStatus === 'error' && (
+                    <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-md flex items-center justify-between">
+                      <div className="flex items-center">
+                        <AlertCircle className='w-5 h-5 text-red-600 mr-2 '/>
+                        <span className='text-red-800'>{ errorMessage }</span>
+                      </div>
+                      <button onClick={ dismissNotification } className='text-red-600 hover:text-red-800'>
+                        <X className='w-5 h-5' />
+                      </button>
+                    </div>
+                  )}
+
+                  {searchStatus === "success" && (
+                    <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-md flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Check className="w-5 h-5 text-green-600 mr-2" />
+                        <span className="text-green-800">Certificado encontrado correctamente.</span>
+                      </div>
+                      <button onClick={dismissNotification} className="text-green-600 hover:text-green-800">
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                    <div className='space-y-6'>
+                      {/* IVA, RFE, ICA */}
+                      <div>
+                        <label className='block text-lg mb-2'>IVA/RTE/ICA:</label>
+                        <select { ...register('typeFile') } className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
+                          <option value="" disabled={ !!selectedTypeCertificate } >
+                             Seleccione el certificado que desea descargar
+                          </option>
+                          { Object.values( Certificate ).map(( certificateType ) => (
+                            <option value={ certificateType } key={ certificateType }>{ certificateType }</option>
+                          ))}
+                        </select>
+                        { errors.typeFile && (
+                          <p className='text-red-500'>{ errors.typeFile.message }</p>
+                        )}
+                      </div>
+
+                      {/* NIT */}
+                      <div>
+                        <label className="block text-lg mb-2">NIT:</label>
+                        <input { ...register('nit') } 
+                          type="number" 
+                          placeholder='Ingrese el NIT'
+                          className='w-full px-3 py-2 border border-gray-300 rounded-md' required
+                        />
+                        { errors.nit  && ( <p className='text-red-500'>{ errors.nit.message }</p>)}
+                      </div>
+
+                      {/* Año */}
+                      <div>
+                        <label className="block text-lg mb-2">Año:</label>
+                        <select
+                        { ...register('year') } 
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white"
+                        defaultValue=""
+                        onChange={ ( e ) => setSelectedYear( Number(e.target.value) )}
+                        >
+                            <option value="" disabled>
+                                Seleccione un año
+                            </option>
+                            {
+                              years.map(( year ) => (
+                                <option key={ year.id } value={ year.id }>{ year.year}</option>
+                              ))
+                            }
+                        </select>
+                        { errors.year && ( <p className='text-red-500'>{ errors.year.message }</p>)}
+                      </div>
+
+                      {/* Periodo */}
+                      <div>
+                        <label className="block text-lg mb-2">Periodo:</label>
+                        <Controller 
+                          name='period'
+                          control={ control }
+                          render={({ field }) => (
+                            <select { ...field } className={`w-full px-3 py-2 border ${ !selectedTypeCertificate ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'border-gray-300 bg-white'} rounded-md `} disabled={ !selectedTypeCertificate } >
+                            <option value="" disabled={ !!field.value }>
+                              Seleccione un periodo
+                            </option>
+                            { periodOptions.map(( period ) => (
+                              <option value={ period } key={ period }>{ period }</option>
+                            ))}
+                        </select>
+                          )}
+                        />
+                        {
+                          errors.period && ( <p className='text-red-500'>{ errors.period.message }</p>)
+                        }
+                        
+                      </div>
+
+                      {/* Botón de búsqueda */}
+                      <div>
+                        <button
+                          className={`w-full rounded-md py-3 transition-colors font-bold flex items-center justify-center ${ !selectedTypeCertificate || periodOptions.length === 0 || !selectedYear ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800  cursor-pointer'} `}
+                          disabled= { !selectedTypeCertificate || periodOptions.length === 0 || !selectedYear}
+                        >
+                          { searchStatus === "searching" ? (
+                              <>
+                                <Loader2 className='w-5 h-5 mr-2 animate-spin'/>
+                                Buscando...
+                              </>
+                            ) : (
+                              <>
+                                <Search className='w-5 h-5 mr-2' />
+                                Buscar Certificado
+                              </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Panel de generación de certificado */}
+                    <div>
+                      <h3 className='text-xl font-semibold mb-4 text-center'>Generación de Certificado</h3>
+
+                      { certificateFound && certificateDetails ? (
+                        <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
+
+                          <div className="mb-4 space-y-2">
+                            
+                            <div className="flex items-center">
+                              <Check className='w-5 h-5 text-green-600 mr-2' />
+                              <span className='text-green-800 font-medium'>Certificado encontrado</span>
+                            </div>
+
+                            <div className="text-sm text-gray-700">
+                              <p>
+                                <strong>Tipo:</strong>
+                              </p>
+                              <p>
+                                <strong>NIT:</strong>
+                              </p>
+                              <p>
+                                <strong>Año:</strong>
+                              </p>
+                              <p>
+                                <strong>Periodo:</strong>
+                              </p>
+                            </div>
+
+                          </div>
+                          
+                          <button className="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-colors font-bold cursor-pointer flex items-center justify-center">
+                            <Download className='w-5 h-5 mr-2'/>
+                            Descargar Certificado
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="p-6 bg-gray-50 border border-gray-200 rounded-lg text-center text-gray-600">
+                          No se ha generado ningún certificado aún.
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </form>
+            </div>
+        </div>
+    </>
+  )
+}
+
+export default App

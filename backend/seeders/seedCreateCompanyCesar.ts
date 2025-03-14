@@ -5,7 +5,7 @@ const seedCompany = async (): Promise< void > => {
         const companyData = {
             nameCompany: 'Cesar Saucedo Salazar S.A.S'.toLowerCase(),
         }
-        const logo = '/uploads/logos/logo.png';
+        const logo = '/uploads/logos/logoCompanyCesar.jpg';
         const newCompany = await CompanyService.createCompany( companyData, logo );
         console.log('Compañia creada:', newCompany);
     } catch (error) {

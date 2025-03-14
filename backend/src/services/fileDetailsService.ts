@@ -4,6 +4,8 @@ import { TFoundUser, TNewFileDetails } from '../types/type';
 import { UserService } from '../services/userService';
 import dayjs from 'dayjs';
 import { TypeFile,TypePeriod } from '../utils/enums';
+import Users from '../models/UsersModel';
+import { Op, Sequelize } from 'sequelize';
 
 export class FilesExcelsDetails {
     
@@ -119,7 +121,7 @@ export class FilesExcelsDetails {
                         tpRete: row.tpRete,
                         userId: user.id,
                         dv: row.dv,
-                        nameCompany: row.nameConcept,
+                        nameCompany: row.nameCompany,
                         nameConcept: row.nameConcept,
                         base: row.base,
                         valueRetained: row.valueRetained,
@@ -147,4 +149,57 @@ export class FilesExcelsDetails {
         }
     }
 
+    // Consulta para tomar detalles
+    static async getUserDetails (nit: number, year: number, typeFile: string, selectedPeriods: string[]) {
+        return await Users.findAll({
+            where: { nit },
+            attributes: ["nit"],
+            include: [
+              {
+                model: FilesDetails,
+                required: true,
+                attributes: [
+                  "nameConcept",
+                  "nameCompany",
+                  "tpRete",
+                  "base",
+                  "valueRetained",
+                  [
+                    Sequelize.literal(
+                      `SUM( value_retained ) OVER ( PARTITION BY FileDetails.user_id )`
+                    ),
+                    "Total_valor_retenido"
+                  ],
+                  [
+                    Sequelize.literal(
+                      `SUM( base ) OVER ( PARTITION BY FileDetails.user_id )`
+                    ),
+                    "Total_base_retencion"
+                  ],
+                ],
+                include: [
+                  {
+                    model: FilesExcels,
+                    required: true,
+                    attributes: ["period"],
+                    where: {
+                      typeFile,
+                      year,
+                      period: { [Op.in]: selectedPeriods },
+                    },
+                  },
+                ],
+              },
+            ],
+            order: [
+              [
+                Sequelize.literal(
+                  `FIELD(\`FileDetails->FilesExcel\`.\`period\`, 'Enero-Febrero', 'Marzo-Abril', 'Mayo-Junio', 'Julio-Agosto', 'Septiembre-Octubre', 'Noviembre-Diciembre')`
+                ),
+                "ASC",
+              ],
+            ],
+            raw: true,
+          });
+        }
 }

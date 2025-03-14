@@ -30,3 +30,7 @@ export type TArrayOfArraysFileDetails = [
     number, // valueRetained
     number  // percentage 
 ][];
+
+export type TPeriodsBy = {
+    [ key: string ]: string[];
+}
