@@ -45,9 +45,9 @@ router.get('/empresasAplicativo', getCompanies );
 // Ruta para poder ver las opciones para generar un certificado
 router.get('/certificadosOpciones', getOptionsCertificate );
 // Ruta para generar certificado
-router.post('/certificado', validateSchema( certificateSchema ), certificateController );
+router.post('/certificado',  authenticateJWT ,validateSchema( certificateSchema ), certificateController );
 // Ruta para buscar si existen detalles para ese certificado
-router.post('/buscarDetallesUsuario', validateSchema( certificateSchema ), searchUserDetails );
+router.post('/buscarDetallesUsuario', authenticateJWT ,validateSchema( certificateSchema ), searchUserDetails );
 // Ruta para mostrar los datos en el dashboard
 router.post('/holi',  getUserCompany )
 

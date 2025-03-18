@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginSchema = void 0;
+const zod_1 = require("zod");
+exports.loginSchema = zod_1.z.object({
+    nit: zod_1.z
+        .number({ invalid_type_error: 'El NIT debe ser un número, no una cadena de texto. Por favor, ingresa solo números.' })
+        .min(100000, { message: 'NIT inválido' })
+        .positive({ message: 'El NIT debe ser un numero entero positivo' }),
+    password: zod_1.z
+        .string({ invalid_type_error: 'La contraseña debe ser un texto, no otro tipo de dato.' })
+        .min(8, { message: 'Contraseña muy corta' })
+        .max(255, { message: 'La contraseña no puede excerderse más de 100 caracteres' })
+});

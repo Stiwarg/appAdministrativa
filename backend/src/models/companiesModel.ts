@@ -25,7 +25,7 @@ Companies.init({
             notEmpty: { msg: 'El nombre de la compañia no puede estar vacio' },
             len: { args: [ 1, 200], msg: 'El nombre de la compañia debe tener entre 1 y 200 caracteres' },
             is: {
-                args: /^[a-zA-Z0-9]([a-zA-Z0-9\s.,'()-]*(?:[ &]+[a-zA-Z0-9\s.,'()-]+)*)?$/,
+                args: /^[a-zA-Z0-9Ññ]([a-zA-Z0-9Ññ\s.,'()-]*(?:[ &]+[a-zA-Z0-9Ññ\s.,'()-]+)*)?$/,
                 msg:'El nombre de la compañia contiene caracteres no permitidos'
             }
         }

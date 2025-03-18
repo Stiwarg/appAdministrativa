@@ -12,6 +12,7 @@ import api from '../services/api';
 import { TUser } from '../types/types'; 
 import ChangePasswordForm from './ChangePassword';
 import { logInfo } from '../utils/logger';
+import DownloadCertificatesFormEmployee from './DownloadCertificatesEmployee';
 
 const Dashboard = () => {
 
@@ -78,7 +79,7 @@ const Dashboard = () => {
               { userRole === 1 && <Route path="/GestionEmpresas" element={< CompanyManagement />} /> }
               <Route path="/cambiarPassword" element={ userRole === 1 ? < ChangePasswordAdminForm /> : <ChangePasswordForm />} />
               { userRole === 1 && <Route path="/cargarArchivos" element={< UploadFilesForm />} />}
-              <Route path="/descargarCertificados" element={< DownloadCertificatesForm />} />
+              <Route path="/descargarCertificados" element={ userRole === 1 ? < DownloadCertificatesForm /> : <DownloadCertificatesFormEmployee/>} />
               <Route path="*" element={ <Navigate to="/dashboard" />} />
 
             </Routes>

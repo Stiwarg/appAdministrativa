@@ -105,8 +105,8 @@ export class PDFDocumentServices {
             const fileDetailsNameCompany = user2['FileDetails.nameCompany'];
             const fileDetailsNit = user2['nit'];
             const fileDetailsNameConcept = user2['FileDetails.nameConcept'];
-            const fileDetailsTpRete = user2['FileDetails.tpRete'];
-            const nitAndTpRete = `${fileDetailsNit}-${fileDetailsTpRete}`;
+            const fileDetailsDv = user2['FileDetails.dv'];
+            const nitAndTpRete = `${fileDetailsNit}-${fileDetailsDv}`;
 
             const identityOrPersonalData = [
                 { label: 'Apellidos y Nombres o Razón Social...: ', value: fileDetailsNameCompany },

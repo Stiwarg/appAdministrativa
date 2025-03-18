@@ -13,15 +13,21 @@ export const filesExcelsSchema = z.object({
             .int({ message: 'El valor debe ser un entero.' })
             .positive({ message: 'El ID de la empresa debe ser un valor positivo.' })
             .min(1, { message: 'El ID de la empresa debe ser al menos 1.' }),  // Solo es necesario esto para validar el mínimo permitido
+
+        typeFile: z
+                .nativeEnum( TypeFile, {
+                        required_error: 'El tipo de archivo es obligatorio.'
+                }),
         period: z
                 .nativeEnum( TypePeriod, {
                         required_error: 'El periodo es obligatorio.',
                         invalid_type_error: 'El periodo debe ser un valor válido.'
                 }),
-        typeFile: z
-                .nativeEnum( TypeFile, {
-                        required_error: 'El tipo de archivo es obligatorio.'
-                }),
+        year: z.
+              coerce.number({ required_error: 'El año es obligatorio'})
+              .int({ message: 'El valor debe ser un entero'})
+              .positive({ message: 'El año debe ser un valor positivo'})
+              .min( 2000, { message: 'El año debe ser mayor o igual a 2000.' }),        
 })
 .superRefine( ( data, ctx ) => {
         // Periodos válidos para cadito de archivo 

@@ -27,8 +27,15 @@ const startServer = async () => {
         // Probar conexión antes de sincronizar 
         await testConnection();
 
+        if ( process.env.NODE_ENV === 'production') {
+            await sequelize.sync({ alter: true }); // Borra las tablas existentes
+            console.log("🚀 Modo Producción");
+        } else {
+            await sequelize.sync({ force: false }); // Borra las tablas existentes
+            console.log("🛠️ Modo Desarrollo");
+
+        }
         // Sincronizar modelos con la base de datos
-        await sequelize.sync({ force: true }); // Borra las tablas existentes
         console.log('Base de datos sincronizada correctamente');
         await seedDatabase();
         app.listen( env.port, () => {

@@ -4,9 +4,18 @@ import { ICertificateRequest } from '../interfaces/interface';
 import { NotFoundError } from '../utils/errors';
 
 export const certificateController = async( req: Request, res: Response ) => {
-    const { nit, year, typeFile, period } : ICertificateRequest = req.body;
-
     try {
+        let { nit, year, typeFile, period } : ICertificateRequest = req.body;
+        const user = req.user;
+
+        if ( user && user.rolId === 2 ) {
+            nit = user.nit;
+        }
+
+        if ( !nit ) {
+            return res.status( 403 ).json({ message: "Acceso denegado" })
+        }
+
         await PDFDocumentServices.certificateGeneration( nit, year, typeFile, period , res );
         return;
     } catch (error) {
@@ -29,8 +38,18 @@ export const getOptionsCertificate = async ( _req: Request, res: Response ) => {
 }
 
 export const searchUserDetails = async (req: Request, res: Response) => {
-    const { nit, year, typeFile, period } : ICertificateRequest = req.body;
     try {
+        let { nit, year, typeFile, period } : ICertificateRequest = req.body;
+        const user = req.user;
+
+        if ( user && user.rolId === 2 ) {
+            nit = user.nit;
+        }
+
+        if ( !nit ) {
+            return res.status( 403 ).json({ message: "Acceso denegado" });
+        }
+
         const { message, certificateFound } = await PDFDocumentServices.getUserCertificateDetails( nit, year, typeFile, period );
         return res.status(200).json({ 
             message,
@@ -43,5 +62,4 @@ export const searchUserDetails = async (req: Request, res: Response) => {
         console.error("Error al buscar detalles del usuario:", error );
         return res.status( 500 ).send('Error al buscar detalles del usuario.');
     }
-
 }

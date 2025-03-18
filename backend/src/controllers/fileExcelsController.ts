@@ -15,7 +15,7 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
 
         // Validar los datos de entrada
         const empresaId = Number( req.body.empresaId );
-        const { period, typeFile } : Omit<IFileInput, "empresaId"> = req.body;
+        const { period, typeFile, year } : Omit<IFileInput, "empresaId"> = req.body;
 
         const excelPath = `/uploads/excels/${ req.file.filename }`;
 
@@ -23,7 +23,8 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
             empresaId,
             nameFile: excelPath,
             period,
-            typeFile
+            typeFile,
+            year
         });
 
         const document = path.join(process.cwd(),'src','uploads','excels', req.file.filename );

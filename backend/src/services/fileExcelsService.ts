@@ -4,8 +4,8 @@ import { TNewFile } from '../types/type';
 import { TypeFile, TypePeriod } from '../utils/enums';
 import path from 'path';
 import { CompanyService } from '../services/companyService';
-import dayjs from 'dayjs';
-import { isValidUploadDate } from '../utils/validateYear';
+//import dayjs from 'dayjs';
+//import { isValidUploadDate } from '../utils/validateYear';
 
 export class FilesExcelsService {
     static async uploadExcelToDatabase ( data: IFileInput ): Promise< TNewFile > {
@@ -27,7 +27,7 @@ export class FilesExcelsService {
                 throw new Error('La empresa con el ID proporcionado no existe.');
             }
 
-            const year = dayjs().year();
+            //const year = dayjs().year();
             const typeFile = data.typeFile as TypeFile;
             const period = data.period as TypePeriod;
 
@@ -37,17 +37,17 @@ export class FilesExcelsService {
             }
 
             // Se valida la fecha de carga
-            if ( !isValidUploadDate( year, period )) {
+            /*if ( !isValidUploadDate( year, period )) {
                 console.log(`❌ Intento de carga después del límite: ${period} (${year})`);
                 throw new Error(`El periodo de carga para ${ period } ha expirado.`)
-            }
+            }*/
 
             //console.log(`📂 Subiendo archivo: ${fileNameOnly}, Empresa ID: ${data.empresaId}, Año: ${year}, Periodo: ${period}`);
             return await FilesExcels.create({
                 nameFile: data.nameFile,
                 empresaId: data.empresaId,
                 typeFile: typeFile,
-                year: year,
+                year: data.year,
                 period: period,
             }) as TNewFile;
         } catch (error) {

@@ -25,8 +25,6 @@ const UploadFilesForm: React.FC = () => {
     filasProcesadas: number;
     filasOmitidas: number;
   } | null >( null );
-  
-  
   const { 
     register, 
     handleSubmit, 
@@ -38,9 +36,15 @@ const UploadFilesForm: React.FC = () => {
   } = useForm< TFilesExcelsSchema >({
     resolver: zodResolver( filesExcelsSchema )
   });
+
+  const currentYear = new Date().getFullYear();
+  const startYear = 2023;
+  const availableYears = Array.from({ length: currentYear - startYear + 1 }, ( _, i ) => currentYear - i );
   
   const selectedTypeFile = watch("typeFile");
   const selectedPeriod = watch('period');
+  const selectedYear = watch('year');
+
   logInfo("📅 Periodo seleccionado:", selectedPeriod);
     
   const periodOptions = useMemo(() => {
@@ -106,6 +110,7 @@ const UploadFilesForm: React.FC = () => {
   
     const onSubmit = async ( data: TFilesExcelsSchema ) => {
       logInfo("✅ Evento onSubmit ejecutado con datos:", data);
+      //console.log("year", data.year);
       try {
         setUploadedStatus("uploading");
         const formData = new FormData();
@@ -117,6 +122,7 @@ const UploadFilesForm: React.FC = () => {
         }
         formData.append("typeFile", data.typeFile);
         formData.append("period", data.period);
+        formData.append("year", data.year.toString() );
         logInfo("📡 Enviando petición a /gestionExcels...");
         const response = await api.post('/gestionExcels', formData, {
           withCredentials: true,
@@ -207,7 +213,6 @@ const UploadFilesForm: React.FC = () => {
                 defaultValue=""
                 onChange={ ( e ) => { 
                   setSelectedCompany( e.target.value ) 
-
                 }}
                 >
                   <option value="" disabled>
@@ -264,6 +269,26 @@ const UploadFilesForm: React.FC = () => {
                   />
                   { errors.period && ( <p className='text-red-500'>{ errors.period.message }</p>)}
                 </div>
+
+                {/* Seleccione el año */}
+                <div>
+                  <label className='block text-lg mb-2'>Indique el año del archivo:</label>
+                  <select 
+                    { ...register("year") }
+                    className='w-full px-3 py-2 border border-gray-300 rounded-md bg-white'
+                    defaultValue=""
+                  >
+                    <option value="" disabled= { !!selectedYear }>
+                      Seleccione el año
+                    </option>
+                    {
+                      availableYears.map(( year ) => (
+                        <option value={ year } key={ year }>{ year } { year === currentYear ? "(Actual)" : ""}</option>
+                      ))
+                    }
+                  </select>
+                    { errors.year && ( <p className='text-red-500'>{ errors.year.message }</p>)}
+                </div>
               
 
               { /* Área de cargar de archivos */ }
@@ -301,8 +326,8 @@ const UploadFilesForm: React.FC = () => {
               {/* Botón de subir */}
               <div className="flex justify-center">
                 <button 
-                className={`w-full rounded-md font-bold mt-2 transition-colors py-3 flex items-center justify-center  ${ !selectedFile || !selectedCompany || !selectedTypeFile ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-black text-white   hover:bg-gray-800 cursor-pointer" }`}
-                disabled={!selectedFile || !selectedCompany || !selectedTypeFile  }
+                className={`w-full rounded-md font-bold mt-2 transition-colors py-3 flex items-center justify-center  ${ !selectedFile || !selectedCompany || !selectedTypeFile || !selectedYear ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-black text-white   hover:bg-gray-800 cursor-pointer" }`}
+                disabled={!selectedFile || !selectedCompany || !selectedTypeFile || !selectedYear  }
                 >
                   {
                     uploadedStatus === 'uploading' ? (

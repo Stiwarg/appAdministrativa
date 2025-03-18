@@ -20,7 +20,8 @@ export const login = async ( req: Request, res: Response ) => {
         const token = await AuthService.autheticatelogin( req.body );
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false, // En desarrollo, se usa 'false' porque no hay HTTPS
+            secure: process.env.NODE_ENV === 'production', // En desarrollo, se usa 'false' porque no hay HTTPS
+            sameSite: 'strict'
         });
         res.status(200).json({ message: 'Login exitoso'});
     } catch (error: any) {

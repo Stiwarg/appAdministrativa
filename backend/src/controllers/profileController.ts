@@ -64,7 +64,7 @@ export const updateOwnPassword = async ( req: Request, res: Response ) => {
         const { newPassword, password } = req.body;
 
         if ( !user || user.rolId !== 2 ) {
-            return res.status( 403 ).json({ message: 'Accesso denegado'});
+            return res.status( 403 ).json({ message: 'Acceso denegado'});
         }
 
         // Asegurar que las contraseñas coincidan

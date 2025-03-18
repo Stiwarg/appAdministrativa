@@ -5,6 +5,7 @@ export const companyCreateSchema = z.object({
         .string({ invalid_type_error: 'El nombre de la compañia debe ser un texto, no otro tipo de dato.'})
         .min( 1, { message: 'El nombre de la compañia debe tener al menos 1 caracter' })
         .max( 200, { message: 'El nombre de la compañia no puede tener más de 200 caracteres'})
+        .regex(/^[a-zA-Z0-9Ññ]([a-zA-Z0-9Ññ\s.,'()-]*(?:[ &]+[a-zA-Z0-9Ññ\s.,'()-]+)*)?$/, { message: 'El nombre de la compañia contiene caracteres no permitidos.'})
         .trim()
         .toLowerCase(),
         //.regex(/^[a-zA-Z0-9][a-zA-Z0-9\s.,'()-]+(?:[ &]+[a-zA-Z0-9\s.,'()-]+)*$/, { message: 'El nombre de la compañia contiene caracteres no permitidos.'}),

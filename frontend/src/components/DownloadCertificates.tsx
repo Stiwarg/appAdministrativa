@@ -83,7 +83,9 @@ const DownloadCertificatesForm: React.FC = () => {
       setSearchStatus('idle');      
     }
     
-    const periodOptions = selectedTypeCertificate === Certificate.CERTIFICADO_RETENCION_FUENTE_RTE ? Object.values( month ) : Object.values( bimesters );
+    const periodOptions = selectedTypeCertificate === Certificate.CERTIFICADO_RETENCION_FUENTE_RTE 
+      ? ["Todos", ...Object.values( month )] 
+      : ["Todos", ...Object.values( bimesters )] ;
 
     const handleCertificateTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       setValue('typeFile', event.target.value as Certificate )

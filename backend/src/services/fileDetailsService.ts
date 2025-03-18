@@ -161,7 +161,7 @@ export class FilesExcelsDetails {
                 attributes: [
                   "nameConcept",
                   "nameCompany",
-                  "tpRete",
+                  "dv",
                   "base",
                   "valueRetained",
                   [

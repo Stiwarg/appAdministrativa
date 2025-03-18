@@ -14,7 +14,8 @@ export const certificateSchema = z.object({
     nit: z
         .number({ invalid_type_error: 'El NIT debe ser un número, no una cadena de texto. Por favor, ingresa solo números.' })
         .min(100000, { message: 'NIT inválido' })
-        .positive({ message: 'El NIT debe ser un numero entero positivo' }),
+        .positive({ message: 'El NIT debe ser un numero entero positivo' })
+        .optional(),
     year: z.
         number({ invalid_type_error: 'El año debe ser un numero, no otro tipo de dato.' })
         .int()

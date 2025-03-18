@@ -91,6 +91,12 @@ export interface ICertificateRequest {
     period: string;
 }
 
+export interface ICertificateMyOwnUser {
+    typeFile: Certificate,
+    year: number,
+    period: string
+}
+
 // Este es get
 export interface ICertificateQueryParams {
     nit: string;  // Se recibe como string en la URL, luego se convierte a número
@@ -108,6 +114,7 @@ export interface IFileInput {
     empresaId: number;
     period: TypePeriod;
     typeFile: TypeFile;
+    year: number;
 }
 
 export interface ICell {
@@ -126,7 +133,7 @@ export interface IUserDetailsExcel {
     "FileDetails.Total_base_retencion": string;
     "FileDetails.Total_valor_retenido": string;
     "FileDetails.FilesExcel.period": string;
-    "FileDetails.tpRete": string;
+    "FileDetails.dv": string;
 }
 
 export interface ICertificateOptions {
