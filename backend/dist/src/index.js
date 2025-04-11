@@ -63,6 +63,11 @@ const startServer = async () => {
         await (0, database_1.testConnection)();
         if (process.env.NODE_ENV === 'production') {
             await database_1.default.sync({ alter: true }); // Borra las tablas existentes
+            const frontendPath = path_1.default.join(process.cwd(), '../frontend/dist');
+            app.use(express_1.default.static(frontendPath));
+            app.get('*', (_req, res) => {
+                res.sendFile(path_1.default.join(frontendPath, 'index.html'));
+            });
             console.log("🚀 Modo Producción");
         }
         else {

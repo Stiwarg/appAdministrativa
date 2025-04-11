@@ -29,6 +29,11 @@ const startServer = async () => {
 
         if ( process.env.NODE_ENV === 'production') {
             await sequelize.sync({ alter: true }); // Borra las tablas existentes
+            const frontendPath = path.join( process.cwd(), '../frontend/dist');
+            app.use( express.static( frontendPath ) );
+            app.get('*', ( _req, res ) => {
+                res.sendFile( path.join( frontendPath, 'index.html') );
+            });
             console.log("🚀 Modo Producción");
         } else {
             await sequelize.sync({ force: false }); // Borra las tablas existentes
