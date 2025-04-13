@@ -8,8 +8,9 @@ dotenv.config({ path: envPath });
 
 export const env: IConfig = {
     
-    port: process.env.PORT || '3308',
-    frotendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+    host: process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'),
+    port: Number(process.env.PORT) || 3308,
+    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
     backendUrl: process.env.BACKEND_URL || 'http://localhost:3308',
     db: {
         host: process.env.DB_HOST || 'localhost',
@@ -28,3 +29,11 @@ export const env: IConfig = {
 
 console.log('🔍 Ruta del archivo .env:', envPath);
 console.log('🔑 SECRET_KEY:', process.env.SECRET_JWT_KEY); // O cualquier otra variable que tengas en .env
+console.log('🔐 Variables de entorno cargadas:', {
+    host: process.env.HOST,
+    port: process.env.PORT,
+    frontend: process.env.FRONTEND_URL,
+    backend: process.env.BACKEND_URL,
+    dbHost: process.env.DB_HOST,
+    jwtKey: process.env.SECRET_JWT_KEY
+});

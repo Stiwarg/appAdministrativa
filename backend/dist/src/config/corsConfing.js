@@ -7,8 +7,8 @@ exports.corsConfig = void 0;
 const cors_1 = __importDefault(require("cors"));
 const env_1 = require("./env");
 const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? [env_1.env.frotendUrl] // En producción, usa el dominio real
-    : ['http://localhost:3308', env_1.env.frotendUrl]; // En desarrollo, permite localhost
+    ? [env_1.env.frontendUrl] // En producción, usa el dominio real
+    : ['http://localhost:3308', env_1.env.frontendUrl]; // En desarrollo, permite localhost
 exports.corsConfig = (0, cors_1.default)({
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH'],

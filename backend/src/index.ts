@@ -7,12 +7,12 @@ import authRoutes from './routes/authRoutes';
 import { seedDatabase } from '../seeders/seedDatabase';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import { printServerInfo } from './utils/serverLogger';
 
 const app = express();
 app.use( cookieParser() );
 app.use( corsConfig );
 app.use( express.json() );
-
 app.get('/prueba', ( _req, res ) => {
     console.log('Someone prueba here!!');
     res.send('Holaaaa');
@@ -43,8 +43,9 @@ const startServer = async () => {
         // Sincronizar modelos con la base de datos
         console.log('Base de datos sincronizada correctamente');
         await seedDatabase();
-        app.listen( env.port, () => {
-            console.log(`Server running on http://localhost:${env.port}`);
+        app.listen( env.port, env.host , () => {
+            //console.log(`🚀 Servidor iniciado en http://${env.host}:${env.port}`);
+            printServerInfo( env.host, env.port, process.env.NODE_ENV!, env.backendUrl );
         });
 
     } catch (error) {

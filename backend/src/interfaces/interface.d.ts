@@ -148,6 +148,13 @@ export interface IUserCompanyInfo {
     name_company: string;
 }
 
+export interface IServerInfo {
+    host: string;
+    port: number;
+    mode: string;
+    url?: string;
+}
+
 // -------------  INTERFACES DEL TIPO GLOBAL EXPRESS  ------------- //
 
 export interface ICustomJwtPayload extends JwtPayload {
@@ -181,8 +188,9 @@ export interface IJwtConfig {
 }
 
 export interface IConfig {
-    port: string,
-    frotendUrl: string,
+    host: string
+    port: number,
+    frontendUrl: string,
     backendUrl: string,
     db: IDbConfig,
     jwt: IJwtConfig

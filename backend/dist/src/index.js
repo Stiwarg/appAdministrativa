@@ -45,6 +45,7 @@ const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const seedDatabase_1 = require("../seeders/seedDatabase");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
+const serverLogger_1 = require("./utils/serverLogger");
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
 app.use(corsConfing_1.corsConfig);
@@ -77,8 +78,9 @@ const startServer = async () => {
         // Sincronizar modelos con la base de datos
         console.log('Base de datos sincronizada correctamente');
         await (0, seedDatabase_1.seedDatabase)();
-        app.listen(env_1.env.port, () => {
-            console.log(`Server running on http://localhost:${env_1.env.port}`);
+        app.listen(env_1.env.port, env_1.env.host, () => {
+            //console.log(`🚀 Servidor iniciado en http://${env.host}:${env.port}`);
+            (0, serverLogger_1.printServerInfo)(env_1.env.host, env_1.env.port, process.env.NODE_ENV, env_1.env.backendUrl);
         });
     }
     catch (error) {
