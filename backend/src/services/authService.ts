@@ -23,7 +23,7 @@ export class AuthService{
 
         const token = jwt.sign(
             { id: user.id, nit: user.nit, companyId: user.companyId ,rolId: user.rolId},
-            jwtConfig.secret, 
+            jwtConfig.secret as string, 
             { expiresIn: jwtConfig.expiresIn }
         );
 
@@ -33,10 +33,10 @@ export class AuthService{
 
     static async refreshToken( oldRefreshToken: string ): Promise<string> {
         try {
-            const decoded = jwt.verify( oldRefreshToken, jwtConfig.secret ) as jwt.JwtPayload;
+            const decoded = jwt.verify( oldRefreshToken, jwtConfig.secret as string ) as jwt.JwtPayload;
             const newToken = jwt.sign(
                 { id: decoded.id, nit: decoded.nit, companyId: decoded.companyId, rolId: decoded.rolId}, 
-                jwtConfig.secret,
+                jwtConfig.secret as string,
                 { expiresIn: jwtConfig.refreshTokenExpiresIn }
             );
 

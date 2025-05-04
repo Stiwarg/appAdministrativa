@@ -13,6 +13,7 @@ const app = express();
 app.use( cookieParser() );
 app.use( corsConfig );
 app.use( express.json() );
+app.options('*', corsConfig );
 app.get('/prueba', ( _req, res ) => {
     console.log('Someone prueba here!!');
     res.send('Holaaaa');
