@@ -49,8 +49,8 @@ const serverLogger_1 = require("./utils/serverLogger");
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
 app.use(corsConfing_1.corsConfig);
-app.use(express_1.default.json());
 app.options('*', corsConfing_1.corsConfig);
+app.use(express_1.default.json());
 app.get('/prueba', (_req, res) => {
     console.log('Someone prueba here!!');
     res.send('Holaaaa');
