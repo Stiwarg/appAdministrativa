@@ -16,14 +16,14 @@ const userService_1 = require("../services/userService");
         res.status(401).json({ message: error })
     }
 }*/
-const isProduction = process.env.NODE_ENV === 'production';
+//const isProduction = process.env.NODE_ENV === 'production';
 const login = async (req, res) => {
     try {
         const token = await authService_1.AuthService.autheticatelogin(req.body);
         res.cookie("token", token, {
             httpOnly: true,
-            secure: isProduction, // En desarrollo, se usa 'false' porque no hay HTTPS
-            sameSite: isProduction ? 'none' : 'lax', // none si hay HTTPS, lax para desarrollo
+            secure: false, //isProduction En desarrollo, se usa 'false' porque no hay HTTPS
+            sameSite: 'lax', // none si hay HTTPS, lax para desarrollo isProduction ? 'none' : 'lax'
             path: '/'
         });
         res.status(200).json({ message: 'Login exitoso' });
