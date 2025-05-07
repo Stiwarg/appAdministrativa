@@ -46,6 +46,7 @@ const seedDatabase_1 = require("../seeders/seedDatabase");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
 const serverLogger_1 = require("./utils/serverLogger");
+const constantes_1 = require("./utils/constantes");
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
 app.use(corsConfing_1.corsConfig);
@@ -56,7 +57,7 @@ app.get('/prueba', (_req, res) => {
     res.send('Holaaaa');
 });
 //app.use('/uploads', express.static( path.resolve('./uploads') ));
-app.use('/uploads', express_1.default.static(path_1.default.join(process.cwd(), 'src', 'uploads')));
+app.use('/uploads', express_1.default.static(constantes_1.uploadsPath));
 app.use('/api', authRoutes_1.default);
 //http://localhost:3001/api/patients/
 const startServer = async () => {

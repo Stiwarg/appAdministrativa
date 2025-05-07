@@ -6,6 +6,7 @@ import path from 'path';
 import { TArrayOfArraysFileDetails, TNewFileDetails } from '../types/type';
 import { FilesExcelsDetails } from '../services/fileDetailsService';
 import { filesDetailsShema } from '../schemas/fileDetailsSchema';
+import { uploadsPath } from '../utils/constantes';
 
 export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
     try {
@@ -27,7 +28,7 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
             year
         });
 
-        const document = path.join(process.cwd(),'src','uploads','excels', req.file.filename );
+        const document = path.join( uploadsPath ,'excels', req.file.filename );
         const workbook = XLSX.readFile( document );
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[ sheetName ];

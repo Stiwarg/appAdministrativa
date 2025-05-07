@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("../utils/multer"));
 const path_1 = __importDefault(require("path"));
+const constantes_1 = require("../utils/constantes");
 const imageUpload = (0, multer_1.default)({
-    destinationPath: path_1.default.join(process.cwd(), 'src', 'uploads', 'logos'),
+    destinationPath: path_1.default.join(constantes_1.uploadsPath, 'logos'),
     allowedMimeTypes: ['image/jpeg', 'image/png', 'image/jpg'],
     maxFileSizeMB: 2
 });

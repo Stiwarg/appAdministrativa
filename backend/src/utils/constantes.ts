@@ -1,3 +1,4 @@
+import path from "path";
 import { Certificate, TypeFile, TypePeriod } from "./enums";
 
 export const bimesters = [
@@ -37,3 +38,7 @@ export const typeFileToCertificate: Record< Certificate, TypePeriod[] > = {
     [ Certificate.CERTIFICADO_INDUSTRIA_COMERCIO ] : ["Todos" as unknown as TypePeriod , ...bimesters], // ICA usa bimestres
     [ Certificate.CERTIFICADO_RETENCION_FUENTE_RTE ] : ["Todos" as unknown as TypePeriod, ...month]  // RTE usa meses
 }; 
+
+export const uploadsPath = process.env.NODE_ENV === 'production'
+    ? path.join( process.cwd(), 'dist', 'src' ,'uploads' )
+    : path.join( process.cwd(), 'src', 'uploads' );

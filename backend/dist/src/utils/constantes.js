@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.typeFileToCertificate = exports.certificateToTypeFile = exports.identityOrPersonalData = exports.retainerData = exports.month = exports.bimesters = void 0;
+exports.uploadsPath = exports.typeFileToCertificate = exports.certificateToTypeFile = exports.identityOrPersonalData = exports.retainerData = exports.month = exports.bimesters = void 0;
+const path_1 = __importDefault(require("path"));
 const enums_1 = require("./enums");
 exports.bimesters = [
     enums_1.TypePeriod.ENERO_FEBRERO, enums_1.TypePeriod.MARZO_ABRIL, enums_1.TypePeriod.MAYO_JUNIO,
@@ -34,3 +38,6 @@ exports.typeFileToCertificate = {
     [enums_1.Certificate.CERTIFICADO_INDUSTRIA_COMERCIO]: ["Todos", ...exports.bimesters], // ICA usa bimestres
     [enums_1.Certificate.CERTIFICADO_RETENCION_FUENTE_RTE]: ["Todos", ...exports.month] // RTE usa meses
 };
+exports.uploadsPath = process.env.NODE_ENV === 'production'
+    ? path_1.default.join(process.cwd(), 'dist', 'src', 'uploads')
+    : path_1.default.join(process.cwd(), 'src', 'uploads');

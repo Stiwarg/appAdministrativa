@@ -9,6 +9,7 @@ const xlsx_1 = __importDefault(require("xlsx"));
 const path_1 = __importDefault(require("path"));
 const fileDetailsService_1 = require("../services/fileDetailsService");
 const fileDetailsSchema_1 = require("../schemas/fileDetailsSchema");
+const constantes_1 = require("../utils/constantes");
 const uploadExcelToDatabase = async (req, res) => {
     try {
         if (!req.file) {
@@ -25,7 +26,7 @@ const uploadExcelToDatabase = async (req, res) => {
             typeFile,
             year
         });
-        const document = path_1.default.join(process.cwd(), 'src', 'uploads', 'excels', req.file.filename);
+        const document = path_1.default.join(constantes_1.uploadsPath, 'excels', req.file.filename);
         const workbook = xlsx_1.default.readFile(document);
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];

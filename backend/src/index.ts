@@ -8,6 +8,7 @@ import { seedDatabase } from '../seeders/seedDatabase';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { printServerInfo } from './utils/serverLogger';
+import { uploadsPath } from './utils/constantes';
 
 const app = express();
 app.use( cookieParser() );
@@ -18,9 +19,10 @@ app.get('/prueba', ( _req, res ) => {
     console.log('Someone prueba here!!');
     res.send('Holaaaa');
 })
-
+ 
 //app.use('/uploads', express.static( path.resolve('./uploads') ));
-app.use('/uploads', express.static( path.join( process.cwd(), 'src', 'uploads') ) );
+
+app.use('/uploads', express.static( uploadsPath ) );
 app.use( '/api', authRoutes );
 //http://localhost:3001/api/patients/
 const startServer = async () => {
