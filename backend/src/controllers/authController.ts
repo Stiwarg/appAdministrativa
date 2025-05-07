@@ -46,7 +46,7 @@ export const logout = ( _req: Request , res: Response ) => {
             secure: false, // isProduction En desarrollo, se usa 'false' porque no hay HTTPS
             sameSite: 'lax', // none si hay HTTPS, lax para desarrollo isProduction ? 'none' : 'lax'
             path: '/' // Asegúrate de que la cookie se elimine en la ruta correcta
-        })
+        });
     
         return res.status( 200 ).json({ message: 'Sesión cerrada exitosamente '});
     } catch (error) {
