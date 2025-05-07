@@ -36,10 +36,16 @@ const login = async (req, res) => {
 exports.login = login;
 const logout = (_req, res) => {
     try {
-        res.clearCookie('token', {
+        /*res.clearCookie('token', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict'
+        });*/
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: false, // isProduction En desarrollo, se usa 'false' porque no hay HTTPS
+            sameSite: 'lax', // none si hay HTTPS, lax para desarrollo isProduction ? 'none' : 'lax'
+            path: '/' // Asegúrate de que la cookie se elimine en la ruta correcta
         });
         return res.status(200).json({ message: 'Sesión cerrada exitosamente ' });
     }
