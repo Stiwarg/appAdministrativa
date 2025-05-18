@@ -13,7 +13,7 @@ const seedAdminUser = async () => {
     try {
         const admin = 'administrador';
         const adminRole = await rolesModel_1.default.findOne({ where: { nameRol: admin.toLowerCase() } });
-        const nameCompanyOwnsApplication = 'Cesar Saucedo Salazar S.A.S';
+        const nameCompanyOwnsApplication = 'APEX TOOL GROUP S.A.S';
         const companyOwns = await companiesModel_1.default.findOne({ where: { nameCompany: nameCompanyOwnsApplication } });
         if (adminRole && companyOwns) {
             const adminData = {

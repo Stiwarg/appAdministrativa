@@ -7,7 +7,6 @@ exports.FilesExcelsDetails = void 0;
 const filesDetailsModel_1 = __importDefault(require("../models/filesDetailsModel"));
 const filesExcelsModel_1 = __importDefault(require("../models/filesExcelsModel"));
 const userService_1 = require("../services/userService");
-const dayjs_1 = __importDefault(require("dayjs"));
 const UsersModel_1 = __importDefault(require("../models/UsersModel"));
 const sequelize_1 = require("sequelize");
 class FilesExcelsDetails {
@@ -60,7 +59,7 @@ class FilesExcelsDetails {
      *  - Crea los usuarios si no existen antes de insertar los datos.
      *  - Guardar los registros en la base de datos en batch para mejorar la velocidad.
      */
-    static async readExcel(excelData, fileExcelId, companyId, period, typeFile) {
+    static async readExcel(excelData, fileExcelId, companyId, period, typeFile, year) {
         try {
             // Guarda los usuarios ya consultados para evitar repetir busquedas
             const usersCache = new Map();
@@ -72,7 +71,7 @@ class FilesExcelsDetails {
                         model: filesExcelsModel_1.default,
                         required: true,
                         where: {
-                            year: (0, dayjs_1.default)().year(),
+                            year: year,
                             period: period,
                             typeFile: typeFile
                         },
@@ -80,8 +79,17 @@ class FilesExcelsDetails {
                     }],
                 attributes: ['userId', 'base', 'valueRetained']
             });
+            console.log('Registros existentes: ', existingRecords.map(r => ({
+                userId: r.userId,
+                base: r.base,
+                valueRetained: r.valueRetained,
+            })));
             // Convertir a Set para búsqueda rápida
-            const existingSet = new Set(existingRecords.map(r => `${r.userId}-${r.base}-${r.valueRetained}-${(0, dayjs_1.default)().year()}-${period}-${typeFile}`));
+            const existingSet = new Set(existingRecords.map(r => `${r.userId}-${r.base}-${r.valueRetained}-${year}-${period}-${typeFile}`));
+            console.log('Claves en existingSet:');
+            for (const key of existingSet) {
+                console.log('⏺️', key);
+            }
             for (const row of excelData) {
                 // Si el usuario ya está en caché, lo usa directamente , asi evita consultas multiples
                 let user = usersCache.get(row.userId);
@@ -91,9 +99,11 @@ class FilesExcelsDetails {
                     // Se guarda en caché para no repetir la consulta en la siguiente iteración
                     usersCache.set(row.userId, user);
                 }
-                const recordKey = `${user.id}-${row.base}-${row.valueRetained}-${(0, dayjs_1.default)().year()}-${period}-${typeFile}`;
+                const recordKey = `${user.id}-${row.base}-${row.valueRetained}-${year}-${period}-${typeFile}`;
+                console.log('verificando registro:', recordKey);
                 // Si no existe en el Set, agregarlo al array para insertarlo
                 if (!existingSet.has(recordKey)) {
+                    console.log('Nuevo registro, se agregará:', recordKey);
                     //console.log('Registro no encontrado, agregado:', recordKey );
                     bulkInsertData.push({
                         filesExcelsId: fileExcelId,
@@ -115,6 +125,7 @@ class FilesExcelsDetails {
             }
             // Inserta todos los datos en una sola consulta SQL lo que es mucho mas rapido 
             if (bulkInsertData.length > 0) {
+                console.log('Insetando registros en batch:', bulkInsertData.length);
                 await filesDetailsModel_1.default.bulkCreate(bulkInsertData);
             }
             //const insertedRecords = await FilesDetails.bulkCreate( bulkInsertData );

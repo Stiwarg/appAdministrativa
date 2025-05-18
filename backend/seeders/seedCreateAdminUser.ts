@@ -14,7 +14,7 @@ const seedAdminUser = async (): Promise<void> => {
         const admin = 'administrador'
         const adminRole = await Roles.findOne({ where: { nameRol: admin.toLowerCase() } });
 
-        const nameCompanyOwnsApplication = 'Cesar Saucedo Salazar S.A.S';
+        const nameCompanyOwnsApplication = 'APEX TOOL GROUP S.A.S';
 
         const companyOwns = await Companies.findOne({ where: { nameCompany: nameCompanyOwnsApplication } });
 

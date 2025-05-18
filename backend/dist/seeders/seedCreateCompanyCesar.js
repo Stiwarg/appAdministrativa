@@ -4,7 +4,7 @@ const companyService_1 = require("../src/services/companyService");
 const seedCompany = async () => {
     try {
         const companyData = {
-            nameCompany: 'Cesar Saucedo Salazar S.A.S'.toLowerCase(),
+            nameCompany: 'APEX TOOL GROUP S.A.S'.toLowerCase(),
         };
         const logo = '/uploads/logos/logoCompanyCesar.jpg';
         const newCompany = await companyService_1.CompanyService.createCompany(companyData, logo);

@@ -69,7 +69,7 @@ const uploadExcelToDatabase = async (req, res) => {
             filesExcelsId: 0,
         }));
         //const desired = validRows[7];
-        await fileDetailsService_1.FilesExcelsDetails.readExcel(formattedData, newFile.id, newFile.empresaId, period, typeFile);
+        await fileDetailsService_1.FilesExcelsDetails.readExcel(formattedData, newFile.id, newFile.empresaId, period, typeFile, year);
         return res.status(201).json({
             message: 'Excel procesado y datos guardados correctamente',
             filasProcesadas: validRows2.length,

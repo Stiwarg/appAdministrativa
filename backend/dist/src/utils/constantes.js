@@ -16,10 +16,10 @@ exports.month = [
     enums_1.TypePeriod.NOVIEMBRE, enums_1.TypePeriod.DICIEMBRE
 ];
 exports.retainerData = [
-    { label: 'Razón Sociall........................................: ', value: 'APREX TOOL GROUP S.A.S' },
+    { label: 'Razón Sociall........................................: ', value: 'APEX TOOL GROUP S.A.S' },
     { label: 'NIT........................................................: ', value: '890.311.366' },
     { label: 'Dirección...............................................: ', value: 'AV CL 26 69 D 91 TO 1 OF 406 BOGOTA' },
-    { label: 'Año Gravable.......................................: ', value: '2024' },
+    { label: 'Año Gravable.......................................: ', value: '' },
     { label: 'Lugar donde se consigno la Retención: ', value: 'BOGOTA' },
 ];
 exports.identityOrPersonalData = [

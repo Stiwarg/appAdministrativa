@@ -3,7 +3,7 @@ import { CompanyService } from '../src/services/companyService';
 const seedCompany = async (): Promise< void > => {
     try {
         const companyData = {
-            nameCompany: 'Cesar Saucedo Salazar S.A.S'.toLowerCase(),
+            nameCompany: 'APEX TOOL GROUP S.A.S'.toLowerCase(),
         }
         const logo = '/uploads/logos/logoCompanyCesar.jpg';
         const newCompany = await CompanyService.createCompany( companyData, logo );

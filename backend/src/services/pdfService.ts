@@ -82,6 +82,14 @@ export class PDFDocumentServices {
 
             doc.moveDown( 1 );
             doc.y += doc.currentLineHeight() * 0.5;
+
+            // Esto es para el año gravable
+            retainerData.forEach( data => {
+                if ( data.label.startsWith('Año Gravable')) {
+                    data.value = year.toString();
+                }
+            })
+
             // Identificación del retenedor
             retainerData.forEach(data => {
                 doc.fontSize(10).font('Helvetica').text(data.label, { continued: true });

@@ -77,7 +77,7 @@ export const uploadExcelToDatabase = async ( req: Request, res: Response ) => {
         }));
 
         //const desired = validRows[7];
-        await FilesExcelsDetails.readExcel( formattedData, newFile.id!, newFile.empresaId, period, typeFile );
+        await FilesExcelsDetails.readExcel( formattedData, newFile.id!, newFile.empresaId, period, typeFile, year );
 
         return res.status( 201 ).json({ 
             message: 'Excel procesado y datos guardados correctamente', 
