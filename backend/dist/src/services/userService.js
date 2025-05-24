@@ -119,7 +119,7 @@ class UserService {
     }
     static async getUserCompany(nit) {
         try {
-            const userCompany = await UsersModel_1.default.findOne({
+            const result = await UsersModel_1.default.findOne({
                 attributes: ['nit'],
                 where: { nit: nit },
                 include: [{
@@ -127,15 +127,22 @@ class UserService {
                         attributes: ['logo', 'name_company'],
                     }],
             });
-            console.log('Consulta ', userCompany);
-            if (!userCompany)
+            console.log('[getUserCompany] Resultado de la consulta:', result);
+            if (!result) {
+                console.log('[getUserCompany] No se encontró ningún usuario con el NIT:', nit);
                 return null;
+            }
+            ;
+            const userCompany = result.get({ plain: true });
             //return userCompany;
+            console.log('[getUserCompany] Resultado de la consulta (objeto plano):', userCompany);
+            console.log('Nombre de la empresa:', userCompany.Company?.name_company);
+            console.log('URL final del logo:', `${env_1.env.backendUrl}${userCompany.Company?.logo}`);
             return {
                 data: {
                     nit: userCompany.nit,
-                    nameCompany: userCompany.Company.name_company,
-                    logo: `${env_1.env.backendUrl}${userCompany.Company.logo}`
+                    nameCompany: userCompany.Company?.name_company ?? '',
+                    logo: `${env_1.env.backendUrl}${userCompany.Company?.logo ?? ''}`
                 }
             };
         }

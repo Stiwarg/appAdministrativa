@@ -3,6 +3,7 @@ import Users from '../models/UsersModel';
 import { TFoundUser, TNewUser, TNewUserEmployee } from '../types/type';
 import Companies from '../models/companiesModel';
 import { env } from '../config/env';
+import { IUser } from '../interfaces/interface';
 // Aqui se escribe la logica relacionada a la funcionalidad del modelo osea del negocio
 
 export class UserService {
@@ -136,24 +137,31 @@ export class UserService {
 
     static async getUserCompany ( nit: number ) {
         try {
-            const userCompany = await Users.findOne({
+            const result = await Users.findOne({
                 attributes: ['nit'],
                 where: { nit: nit },
                 include: [{
                     model: Companies,
                     attributes: ['logo','name_company'],
                 }],
-            }) as Users & { Company: { logo: string, name_company: string } };
+            });
 
-            console.log('Consulta ',userCompany );
-            if ( !userCompany ) return null;
+            console.log('[getUserCompany] Resultado de la consulta:', result);
+            if ( !result ) {
+                console.log('[getUserCompany] No se encontró ningún usuario con el NIT:', nit);
+                return null
+            };
 
+            const userCompany = result.get({ plain: true }) as IUser & { Company?: { logo: string; name_company: string}}; 
             //return userCompany;
+            console.log('[getUserCompany] Resultado de la consulta (objeto plano):', userCompany);
+            console.log('Nombre de la empresa:', userCompany.Company?.name_company);
+            console.log('URL final del logo:', `${env.backendUrl}${userCompany.Company?.logo}`);
             return {
                 data: {
                     nit: userCompany.nit,
-                    nameCompany: userCompany.Company.name_company,
-                    logo: `${ env.backendUrl }${ userCompany.Company.logo }`
+                    nameCompany: userCompany.Company?.name_company ?? '',
+                    logo: `${ env.backendUrl }${ userCompany.Company?.logo ?? '' }`
                 }
             }
 

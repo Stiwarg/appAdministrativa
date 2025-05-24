@@ -63,9 +63,11 @@ const welcomeUser = async (req, res) => {
         const nit = req.user.nit;
         // Obtener los datos de la empresa del usuario
         const userCompany = await userService_1.UserService.getUserCompany(nit);
+        console.log('[WelcomeUser] Resultado de getUserCompany:', userCompany);
         if (!userCompany) {
             return res.status(404).json({ message: "No se encontró información de la empresa del usuario" });
         }
+        console.log('[WelcomeUser] Respuesta final:', userCompany.data);
         return res.json({
             message: 'Bienvenido al área protegido',
             user: req.user,

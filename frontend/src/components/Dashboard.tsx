@@ -26,6 +26,8 @@ const Dashboard = () => {
       .then( (res) => {
         logInfo('Datos recibidos del backend:', res.data );
         logInfo('Usuarios recibido:', res.data.user );
+        logInfo('Logo URL recibida:', res.data.company.logo);
+        console.log('Logo URL recibida:', res.data.company.logo);
         setUser( {
           nit: res.data.company.nit,
           logo: res.data.company.logo,
