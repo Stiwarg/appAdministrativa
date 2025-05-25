@@ -156,12 +156,13 @@ export class UserService {
             //return userCompany;
             console.log('[getUserCompany] Resultado de la consulta (objeto plano):', userCompany);
             console.log('Nombre de la empresa:', userCompany.Company?.name_company);
-            console.log('URL final del logo:', `${env.backendUrl}${userCompany.Company?.logo}`);
+            //console.log('URL final del logo:', `${env.backendUrl}${userCompany.Company?.logo}`);
+            console.log('URL final del logo2:', `${ env.frontendUrl }${ userCompany.Company?.logo}`);
             return {
                 data: {
                     nit: userCompany.nit,
                     nameCompany: userCompany.Company?.name_company ?? '',
-                    logo: `${ env.backendUrl }${ userCompany.Company?.logo ?? '' }`
+                    logo: `${ env.frontendUrl }${ userCompany.Company?.logo ?? '' }`
                 }
             }
 
