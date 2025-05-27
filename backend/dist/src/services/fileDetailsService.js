@@ -7,8 +7,10 @@ exports.FilesExcelsDetails = void 0;
 const filesDetailsModel_1 = __importDefault(require("../models/filesDetailsModel"));
 const filesExcelsModel_1 = __importDefault(require("../models/filesExcelsModel"));
 const userService_1 = require("../services/userService");
+const enums_1 = require("../utils/enums");
 const UsersModel_1 = __importDefault(require("../models/UsersModel"));
 const sequelize_1 = require("sequelize");
+const constantes_1 = require("../utils/constantes");
 class FilesExcelsDetails {
     // Hay dos funciones que son iguales una funciona con la estabilidad de agregar los datos pero se demora mas y hay otra función que es veloz e inserta los miles de registros rapidamente pero puede causar problemas de concurrecnia si no se maneja bien 
     /**
@@ -84,7 +86,7 @@ class FilesExcelsDetails {
                 base: r.base,
                 valueRetained: r.valueRetained,
             })));
-            // Convertir a Set para búsqueda rápida
+            // Convertir a Set para búsqueda rápida 
             const existingSet = new Set(existingRecords.map(r => `${r.userId}-${r.base}-${r.valueRetained}-${year}-${period}-${typeFile}`));
             console.log('Claves en existingSet:');
             for (const key of existingSet) {
@@ -99,6 +101,13 @@ class FilesExcelsDetails {
                     // Se guarda en caché para no repetir la consulta en la siguiente iteración
                     usersCache.set(row.userId, user);
                 }
+                console.log(`🟡 Usuario ID ${user.id} pertenece a empresa ID ${user.companyId} | Empresa actual ID: ${companyId}`);
+                if (user.companyId !== companyId) {
+                    console.log(` El usuario con el ID ${user.id} no pertenece a la empresa con ID ${companyId}. Registro omitido.`);
+                    continue; // Omitir este registro si el usuario no pertenece a la empresa
+                }
+                // Verificar si el registro ya existe en la base de datos usando el Set
+                // Se crea una clave unica para identificar el registro 
                 const recordKey = `${user.id}-${row.base}-${row.valueRetained}-${year}-${period}-${typeFile}`;
                 console.log('verificando registro:', recordKey);
                 // Si no existe en el Set, agregarlo al array para insertarlo
@@ -139,6 +148,10 @@ class FilesExcelsDetails {
     }
     // Consulta para tomar detalles
     static async getUserDetails(nit, year, typeFile, selectedPeriods) {
+        // Verifica que el tipo de archivo sea válido, RTE es mensual y ICA e IVA son bimestrales. 
+        const periodOrder = (typeFile === enums_1.TypeFile.RTE) ? constantes_1.month : constantes_1.bimesters;
+        // Verifica que los periodos seleccionados sean válidos 
+        const fieldOrder = `FIELD(\`FileDetails->FilesExcel\`.\`period\`, ${periodOrder.map(p => `'${p}'`).join(', ')})`;
         return await UsersModel_1.default.findAll({
             where: { nit },
             attributes: ["nit"],
@@ -177,7 +190,7 @@ class FilesExcelsDetails {
             ],
             order: [
                 [
-                    sequelize_1.Sequelize.literal(`FIELD(\`FileDetails->FilesExcel\`.\`period\`, 'Enero-Febrero', 'Marzo-Abril', 'Mayo-Junio', 'Julio-Agosto', 'Septiembre-Octubre', 'Noviembre-Diciembre')`),
+                    sequelize_1.Sequelize.literal(fieldOrder),
                     "ASC",
                 ],
             ],
